@@ -1,0 +1,313 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.1.6 #12539 (MINGW32)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module text
+                                      6 	.optsdcc -mgbz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _set_bkg_tiles
+                                     12 	.globl _set_bkg_data
+                                     13 	.globl _text_load_font
+                                     14 	.globl _text_print_char_bkg
+                                     15 	.globl _text_print_string_bkg
+                                     16 ;--------------------------------------------------------
+                                     17 ; special function registers
+                                     18 ;--------------------------------------------------------
+                                     19 ;--------------------------------------------------------
+                                     20 ; ram data
+                                     21 ;--------------------------------------------------------
+                                     22 	.area _DATA
+                                     23 ;--------------------------------------------------------
+                                     24 ; ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area _INITIALIZED
+                                     27 ;--------------------------------------------------------
+                                     28 ; absolute external ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _DABS (ABS)
+                                     31 ;--------------------------------------------------------
+                                     32 ; global & static initialisations
+                                     33 ;--------------------------------------------------------
+                                     34 	.area _HOME
+                                     35 	.area _GSINIT
+                                     36 	.area _GSFINAL
+                                     37 	.area _GSINIT
+                                     38 ;--------------------------------------------------------
+                                     39 ; Home
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _HOME
+                                     42 	.area _HOME
+                                     43 ;--------------------------------------------------------
+                                     44 ; code
+                                     45 ;--------------------------------------------------------
+                                     46 	.area _CODE
+                                     47 ;src/text.c:11: void text_load_font() {
+                                     48 ;	---------------------------------
+                                     49 ; Function text_load_font
+                                     50 ; ---------------------------------
+      000000                         51 _text_load_font::
+                                     52 ;src/text.c:13: set_bkg_data(TEXT_FONT_OFFSET, font_TILE_COUNT, font_tiles);
+      000000 11r00r00                53 	ld	de, #_font_tiles
+      000003 D5                      54 	push	de
+      000004 21 D0 2E                55 	ld	hl, #0x2ed0
+      000007 E5                      56 	push	hl
+      000008 CDr00r00                57 	call	_set_bkg_data
+      00000B E8 04                   58 	add	sp, #4
+                                     59 ;src/text.c:14: }
+      00000D C9                      60 	ret
+                                     61 ;src/text.c:17: void text_print_char_bkg(UINT8 x, UINT8 y, unsigned char chr) {
+                                     62 ;	---------------------------------
+                                     63 ; Function text_print_char_bkg
+                                     64 ; ---------------------------------
+      00000E                         65 _text_print_char_bkg::
+      00000E 3B                      66 	dec	sp
+                                     67 ;src/text.c:18: UINT8 tile = _TEXT_CHAR_TOFU;
+      00000F F8 00                   68 	ldhl	sp,	#0
+      000011 36 FD                   69 	ld	(hl), #0xfd
+                                     70 ;src/text.c:19: if (chr >= 'a' && chr <= 'z') {
+      000013 F8 05                   71 	ldhl	sp,	#5
+      000015 7E                      72 	ld	a, (hl)
+      000016 D6 61                   73 	sub	a, #0x61
+      000018 38 0E                   74 	jr	C, 00121$
+      00001A 3E 7A                   75 	ld	a, #0x7a
+      00001C 96                      76 	sub	a, (hl)
+      00001D 38 09                   77 	jr	C, 00121$
+                                     78 ;src/text.c:20: tile = _TEXT_CHAR_A + chr - 'a';
+      00001F 7E                      79 	ld	a, (hl)
+      000020 C6 6F                   80 	add	a, #0x6f
+      000022 F8 00                   81 	ldhl	sp,	#0
+      000024 77                      82 	ld	(hl), a
+      000025 C3rD4r00                83 	jp	00122$
+      000028                         84 00121$:
+                                     85 ;src/text.c:21: } else if (chr >= 'A' && chr <= 'Z') {
+      000028 F8 05                   86 	ldhl	sp,	#5
+      00002A 7E                      87 	ld	a, (hl)
+      00002B D6 41                   88 	sub	a, #0x41
+      00002D 38 0E                   89 	jr	C, 00117$
+      00002F 3E 5A                   90 	ld	a, #0x5a
+      000031 96                      91 	sub	a, (hl)
+      000032 38 09                   92 	jr	C, 00117$
+                                     93 ;src/text.c:22: tile = _TEXT_CHAR_A + chr - 'A';
+      000034 7E                      94 	ld	a, (hl)
+      000035 C6 8F                   95 	add	a, #0x8f
+      000037 F8 00                   96 	ldhl	sp,	#0
+      000039 77                      97 	ld	(hl), a
+      00003A C3rD4r00                98 	jp	00122$
+      00003D                         99 00117$:
+                                    100 ;src/text.c:23: } else if (chr >= '0' && chr <= '9') {
+      00003D F8 05                  101 	ldhl	sp,	#5
+      00003F 7E                     102 	ld	a, (hl)
+      000040 D6 30                  103 	sub	a, #0x30
+      000042 38 0E                  104 	jr	C, 00113$
+      000044 3E 39                  105 	ld	a, #0x39
+      000046 96                     106 	sub	a, (hl)
+      000047 38 09                  107 	jr	C, 00113$
+                                    108 ;src/text.c:24: tile = _TEXT_CHAR_0 + chr - '0';
+      000049 7E                     109 	ld	a, (hl)
+      00004A C6 BA                  110 	add	a, #0xba
+      00004C F8 00                  111 	ldhl	sp,	#0
+      00004E 77                     112 	ld	(hl), a
+      00004F C3rD4r00               113 	jp	00122$
+      000052                        114 00113$:
+                                    115 ;src/text.c:26: switch (chr) {
+      000052 F8 05                  116 	ldhl	sp,	#5
+      000054 7E                     117 	ld	a, (hl)
+      000055 D6 20                  118 	sub	a, #0x20
+      000057 28 77                  119 	jr	Z, 00110$
+      000059 F8 05                  120 	ldhl	sp,	#5
+      00005B 7E                     121 	ld	a, (hl)
+      00005C D6 21                  122 	sub	a, #0x21
+      00005E 28 58                  123 	jr	Z, 00106$
+      000060 F8 05                  124 	ldhl	sp,	#5
+      000062 7E                     125 	ld	a, (hl)
+      000063 D6 27                  126 	sub	a, #0x27
+      000065 28 33                  127 	jr	Z, 00101$
+      000067 F8 05                  128 	ldhl	sp,	#5
+      000069 7E                     129 	ld	a, (hl)
+      00006A D6 28                  130 	sub	a, #0x28
+      00006C 28 56                  131 	jr	Z, 00108$
+      00006E F8 05                  132 	ldhl	sp,	#5
+      000070 7E                     133 	ld	a, (hl)
+      000071 D6 29                  134 	sub	a, #0x29
+      000073 28 55                  135 	jr	Z, 00109$
+      000075 F8 05                  136 	ldhl	sp,	#5
+      000077 7E                     137 	ld	a, (hl)
+      000078 D6 2C                  138 	sub	a, #0x2c
+      00007A 28 30                  139 	jr	Z, 00104$
+      00007C F8 05                  140 	ldhl	sp,	#5
+      00007E 7E                     141 	ld	a, (hl)
+      00007F D6 2D                  142 	sub	a, #0x2d
+      000081 28 1D                  143 	jr	Z, 00102$
+      000083 F8 05                  144 	ldhl	sp,	#5
+      000085 7E                     145 	ld	a, (hl)
+      000086 D6 2E                  146 	sub	a, #0x2e
+      000088 28 1C                  147 	jr	Z, 00103$
+      00008A F8 05                  148 	ldhl	sp,	#5
+      00008C 7E                     149 	ld	a, (hl)
+      00008D D6 3A                  150 	sub	a, #0x3a
+      00008F 28 21                  151 	jr	Z, 00105$
+      000091 F8 05                  152 	ldhl	sp,	#5
+      000093 7E                     153 	ld	a, (hl)
+      000094 D6 3F                  154 	sub	a, #0x3f
+      000096 28 26                  155 	jr	Z, 00107$
+      000098 18 3A                  156 	jr	00122$
+                                    157 ;src/text.c:27: case '\'':
+      00009A                        158 00101$:
+                                    159 ;src/text.c:28: tile = _TEXT_CHAR_APOSTROPHE;
+      00009A F8 00                  160 	ldhl	sp,	#0
+      00009C 36 F4                  161 	ld	(hl), #0xf4
+                                    162 ;src/text.c:29: break;
+      00009E 18 34                  163 	jr	00122$
+                                    164 ;src/text.c:30: case '-':
+      0000A0                        165 00102$:
+                                    166 ;src/text.c:31: tile = _TEXT_CHAR_DASH;
+      0000A0 F8 00                  167 	ldhl	sp,	#0
+      0000A2 36 F5                  168 	ld	(hl), #0xf5
+                                    169 ;src/text.c:32: break;
+      0000A4 18 2E                  170 	jr	00122$
+                                    171 ;src/text.c:33: case '.':
+      0000A6                        172 00103$:
+                                    173 ;src/text.c:34: tile = _TEXT_CHAR_DOT;
+      0000A6 F8 00                  174 	ldhl	sp,	#0
+      0000A8 36 F6                  175 	ld	(hl), #0xf6
+                                    176 ;src/text.c:35: break;
+      0000AA 18 28                  177 	jr	00122$
+                                    178 ;src/text.c:36: case ',':
+      0000AC                        179 00104$:
+                                    180 ;src/text.c:37: tile = _TEXT_CHAR_COMMA;
+      0000AC F8 00                  181 	ldhl	sp,	#0
+      0000AE 36 F7                  182 	ld	(hl), #0xf7
+                                    183 ;src/text.c:38: break;
+      0000B0 18 22                  184 	jr	00122$
+                                    185 ;src/text.c:39: case ':':
+      0000B2                        186 00105$:
+                                    187 ;src/text.c:40: tile = _TEXT_CHAR_COLON;
+      0000B2 F8 00                  188 	ldhl	sp,	#0
+      0000B4 36 F8                  189 	ld	(hl), #0xf8
+                                    190 ;src/text.c:41: break;
+      0000B6 18 1C                  191 	jr	00122$
+                                    192 ;src/text.c:42: case '!':
+      0000B8                        193 00106$:
+                                    194 ;src/text.c:43: tile = _TEXT_CHAR_EXCLAMATION;
+      0000B8 F8 00                  195 	ldhl	sp,	#0
+      0000BA 36 F9                  196 	ld	(hl), #0xf9
+                                    197 ;src/text.c:44: break;
+      0000BC 18 16                  198 	jr	00122$
+                                    199 ;src/text.c:45: case '?':
+      0000BE                        200 00107$:
+                                    201 ;src/text.c:46: tile = _TEXT_CHAR_INTERROGATION;
+      0000BE F8 00                  202 	ldhl	sp,	#0
+      0000C0 36 FA                  203 	ld	(hl), #0xfa
+                                    204 ;src/text.c:47: break;
+      0000C2 18 10                  205 	jr	00122$
+                                    206 ;src/text.c:48: case '(':
+      0000C4                        207 00108$:
+                                    208 ;src/text.c:49: tile = _TEXT_CHAR_LPARENTHESES;
+      0000C4 F8 00                  209 	ldhl	sp,	#0
+      0000C6 36 FB                  210 	ld	(hl), #0xfb
+                                    211 ;src/text.c:50: break;
+      0000C8 18 0A                  212 	jr	00122$
+                                    213 ;src/text.c:51: case ')':
+      0000CA                        214 00109$:
+                                    215 ;src/text.c:52: tile = _TEXT_CHAR_RPARENTHESES;
+      0000CA F8 00                  216 	ldhl	sp,	#0
+      0000CC 36 FC                  217 	ld	(hl), #0xfc
+                                    218 ;src/text.c:53: break;
+      0000CE 18 04                  219 	jr	00122$
+                                    220 ;src/text.c:54: case ' ':
+      0000D0                        221 00110$:
+                                    222 ;src/text.c:55: tile = _TEXT_CHAR_SPACE;
+      0000D0 F8 00                  223 	ldhl	sp,	#0
+      0000D2 36 FF                  224 	ld	(hl), #0xff
+                                    225 ;src/text.c:57: }
+      0000D4                        226 00122$:
+                                    227 ;src/text.c:59: set_bkg_tiles(x, y, 1, 1, &tile);
+      0000D4 F8 00                  228 	ldhl	sp,	#0
+      0000D6 E5                     229 	push	hl
+      0000D7 21 01 01               230 	ld	hl, #0x101
+      0000DA E5                     231 	push	hl
+      0000DB F8 08                  232 	ldhl	sp,	#8
+      0000DD 3A                     233 	ld	a, (hl-)
+      0000DE 57                     234 	ld	d, a
+      0000DF 5E                     235 	ld	e, (hl)
+      0000E0 D5                     236 	push	de
+      0000E1 CDr00r00               237 	call	_set_bkg_tiles
+                                    238 ;src/text.c:60: }
+      0000E4 E8 07                  239 	add	sp, #7
+      0000E6 C9                     240 	ret
+                                    241 ;src/text.c:64: void text_print_string_bkg(UINT8 x, UINT8 y, unsigned char *string) {
+                                    242 ;	---------------------------------
+                                    243 ; Function text_print_string_bkg
+                                    244 ; ---------------------------------
+      0000E7                        245 _text_print_string_bkg::
+      0000E7 3B                     246 	dec	sp
+      0000E8 3B                     247 	dec	sp
+                                    248 ;src/text.c:65: UINT8 offset_x = 0;
+                                    249 ;src/text.c:66: UINT8 offset_y = 0;
+      0000E9 01 00 00               250 	ld	bc, #0x0
+                                    251 ;src/text.c:68: while (string[0]) {
+      0000EC F8 06                  252 	ldhl	sp,	#6
+      0000EE 2A                     253 	ld	a, (hl+)
+      0000EF 5F                     254 	ld	e, a
+      0000F0 56                     255 	ld	d, (hl)
+      0000F1                        256 00104$:
+      0000F1 1A                     257 	ld	a, (de)
+      0000F2 F8 00                  258 	ldhl	sp,	#0
+                                    259 ;src/text.c:69: if (string[0] == '\n') {
+      0000F4 77                     260 	ld	(hl),a
+      0000F5 B7                     261 	or	a,a
+      0000F6 28 2C                  262 	jr	Z, 00107$
+                                    263 ;src/text.c:70: offset_x = 0;
+      0000F8 D6 0A                  264 	sub	a,#0x0a
+      0000FA 20 04                  265 	jr	NZ, 00102$
+      0000FC 4F                     266 	ld	c,a
+                                    267 ;src/text.c:71: offset_y += 1;
+      0000FD 04                     268 	inc	b
+      0000FE 18 21                  269 	jr	00103$
+      000100                        270 00102$:
+                                    271 ;src/text.c:73: text_print_char_bkg(x + offset_x, y + offset_y, (unsigned char) string[0]);
+      000100 F8 05                  272 	ldhl	sp,	#5
+      000102 7E                     273 	ld	a, (hl)
+      000103 80                     274 	add	a, b
+      000104 F8 01                  275 	ldhl	sp,	#1
+      000106 77                     276 	ld	(hl), a
+      000107 F8 04                  277 	ldhl	sp,	#4
+      000109 7E                     278 	ld	a, (hl)
+      00010A 81                     279 	add	a, c
+      00010B C5                     280 	push	bc
+      00010C D5                     281 	push	de
+      00010D F8 04                  282 	ldhl	sp,	#4
+      00010F 66                     283 	ld	h, (hl)
+                                    284 ;	spillPairReg hl
+                                    285 ;	spillPairReg hl
+      000110 E5                     286 	push	hl
+      000111 33                     287 	inc	sp
+      000112 F8 06                  288 	ldhl	sp,	#6
+      000114 66                     289 	ld	h, (hl)
+                                    290 ;	spillPairReg hl
+                                    291 ;	spillPairReg hl
+      000115 E5                     292 	push	hl
+      000116 33                     293 	inc	sp
+      000117 F5                     294 	push	af
+      000118 33                     295 	inc	sp
+      000119 CDr0Er00               296 	call	_text_print_char_bkg
+      00011C E8 03                  297 	add	sp, #3
+      00011E D1                     298 	pop	de
+      00011F C1                     299 	pop	bc
+                                    300 ;src/text.c:74: offset_x += 1;
+      000120 0C                     301 	inc	c
+      000121                        302 00103$:
+                                    303 ;src/text.c:76: string += 1;  // Increment pointer address, /!\ THIS IS DANGEROUS!
+      000121 13                     304 	inc	de
+      000122 18 CD                  305 	jr	00104$
+      000124                        306 00107$:
+                                    307 ;src/text.c:78: }
+      000124 33                     308 	inc	sp
+      000125 33                     309 	inc	sp
+      000126 C9                     310 	ret
+                                    311 	.area _CODE
+                                    312 	.area _INITIALIZER
+                                    313 	.area _CABS (ABS)

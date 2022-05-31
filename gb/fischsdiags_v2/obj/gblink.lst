@@ -1,0 +1,383 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.1.6 #12539 (MINGW32)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module gblink
+                                      6 	.optsdcc -mgbz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _gblink_test
+                                     12 	.globl _receive_data_str
+                                     13 	.globl _show_gblink_background
+                                     14 	.globl _set_bkg_palette
+                                     15 	.globl _text_print_char_bkg
+                                     16 	.globl _text_print_string_bkg
+                                     17 	.globl _blank_display
+                                     18 	.globl _EMU_printf
+                                     19 	.globl _set_bkg_tiles
+                                     20 	.globl _set_bkg_data
+                                     21 	.globl _delay
+                                     22 	.globl _receive_byte
+                                     23 	.globl _send_byte
+                                     24 ;--------------------------------------------------------
+                                     25 ; special function registers
+                                     26 ;--------------------------------------------------------
+                                     27 ;--------------------------------------------------------
+                                     28 ; ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _DATA
+                                     31 ;--------------------------------------------------------
+                                     32 ; ram data
+                                     33 ;--------------------------------------------------------
+                                     34 	.area _INITIALIZED
+      000000                         35 ___EMU_PROFILER_INIT:
+      000000                         36 	.ds 2
+                                     37 ;--------------------------------------------------------
+                                     38 ; absolute external ram data
+                                     39 ;--------------------------------------------------------
+                                     40 	.area _DABS (ABS)
+                                     41 ;--------------------------------------------------------
+                                     42 ; global & static initialisations
+                                     43 ;--------------------------------------------------------
+                                     44 	.area _HOME
+                                     45 	.area _GSINIT
+                                     46 	.area _GSFINAL
+                                     47 	.area _GSINIT
+                                     48 ;--------------------------------------------------------
+                                     49 ; Home
+                                     50 ;--------------------------------------------------------
+                                     51 	.area _HOME
+                                     52 	.area _HOME
+                                     53 ;--------------------------------------------------------
+                                     54 ; code
+                                     55 ;--------------------------------------------------------
+                                     56 	.area _CODE
+                                     57 ;src/test_impl/gblink.c:11: void show_gblink_background() {
+                                     58 ;	---------------------------------
+                                     59 ; Function show_gblink_background
+                                     60 ; ---------------------------------
+      000000                         61 _show_gblink_background::
+                                     62 ;src/test_impl/gblink.c:12: HIDE_BKG;
+      000000 F0r00                   63 	ldh	a, (_LCDC_REG + 0)
+      000002 E6 FE                   64 	and	a, #0xfe
+      000004 E0r00                   65 	ldh	(_LCDC_REG + 0), a
+                                     66 ;src/test_impl/gblink.c:13: set_bkg_palette(1, 1, &gblink_bg_palettes[4]);
+      000006 11r08r00                67 	ld	de, #(_gblink_bg_palettes + 8)
+      000009 D5                      68 	push	de
+      00000A 21 01 01                69 	ld	hl, #0x101
+      00000D E5                      70 	push	hl
+      00000E CDr00r00                71 	call	_set_bkg_palette
+      000011 E8 04                   72 	add	sp, #4
+                                     73 ;src/test_impl/gblink.c:14: set_bkg_palette(0, 1, &gblink_bg_palettes[0]);
+      000013 11r00r00                74 	ld	de, #_gblink_bg_palettes
+      000016 D5                      75 	push	de
+      000017 AF                      76 	xor	a, a
+      000018 3C                      77 	inc	a
+      000019 F5                      78 	push	af
+      00001A CDr00r00                79 	call	_set_bkg_palette
+      00001D E8 04                   80 	add	sp, #4
+                                     81 ;src/test_impl/gblink.c:16: set_bkg_data(0x0, gblink_bg_TILE_COUNT, gblink_bg_tiles);
+      00001F 11r00r00                82 	ld	de, #_gblink_bg_tiles
+      000022 D5                      83 	push	de
+      000023 21 00 52                84 	ld	hl, #0x5200
+      000026 E5                      85 	push	hl
+      000027 CDr00r00                86 	call	_set_bkg_data
+      00002A E8 04                   87 	add	sp, #4
+                                     88 ;src/test_impl/gblink.c:17: VBK_REG = 1;
+      00002C 3E 01                   89 	ld	a, #0x01
+      00002E E0r00                   90 	ldh	(_VBK_REG + 0), a
+                                     91 ;src/test_impl/gblink.c:18: set_bkg_tiles(0, 0, 20, 18, gblink_bg_map_attributes);
+      000030 11r00r00                92 	ld	de, #_gblink_bg_map_attributes
+      000033 D5                      93 	push	de
+      000034 21 14 12                94 	ld	hl, #0x1214
+      000037 E5                      95 	push	hl
+      000038 AF                      96 	xor	a, a
+      000039 0F                      97 	rrca
+      00003A F5                      98 	push	af
+      00003B CDr00r00                99 	call	_set_bkg_tiles
+      00003E E8 06                  100 	add	sp, #6
+                                    101 ;src/test_impl/gblink.c:19: VBK_REG = 0;
+      000040 AF                     102 	xor	a, a
+      000041 E0r00                  103 	ldh	(_VBK_REG + 0), a
+                                    104 ;src/test_impl/gblink.c:20: set_bkg_tiles(0, 0, 20, 18, gblink_bg_map);
+      000043 11r00r00               105 	ld	de, #_gblink_bg_map
+      000046 D5                     106 	push	de
+      000047 21 14 12               107 	ld	hl, #0x1214
+      00004A E5                     108 	push	hl
+      00004B AF                     109 	xor	a, a
+      00004C 0F                     110 	rrca
+      00004D F5                     111 	push	af
+      00004E CDr00r00               112 	call	_set_bkg_tiles
+      000051 E8 06                  113 	add	sp, #6
+                                    114 ;src/test_impl/gblink.c:21: SHOW_BKG;
+      000053 F0r00                  115 	ldh	a, (_LCDC_REG + 0)
+      000055 F6 01                  116 	or	a, #0x01
+      000057 E0r00                  117 	ldh	(_LCDC_REG + 0), a
+                                    118 ;src/test_impl/gblink.c:22: }
+      000059 C9                     119 	ret
+                                    120 ;src/test_impl/gblink.c:25: void receive_data_str() {
+                                    121 ;	---------------------------------
+                                    122 ; Function receive_data_str
+                                    123 ; ---------------------------------
+      00005A                        124 _receive_data_str::
+      00005A 3B                     125 	dec	sp
+      00005B 3B                     126 	dec	sp
+                                    127 ;src/test_impl/gblink.c:27: uint8_t recv_x = 1;
+                                    128 ;src/test_impl/gblink.c:28: for (int i = 0; i < 0x20; ++i)
+      00005C 01 01 05               129 	ld	bc, #0x501
+      00005F AF                     130 	xor	a, a
+      000060 F8 00                  131 	ldhl	sp,	#0
+      000062 22                     132 	ld	(hl+), a
+      000063 77                     133 	ld	(hl), a
+      000064                        134 00111$:
+      000064 F8 00                  135 	ldhl	sp,	#0
+      000066 2A                     136 	ld	a, (hl+)
+      000067 D6 20                  137 	sub	a, #0x20
+      000069 7E                     138 	ld	a, (hl)
+      00006A DE 00                  139 	sbc	a, #0x00
+      00006C 56                     140 	ld	d, (hl)
+      00006D 3E 00                  141 	ld	a, #0x00
+      00006F CB 7F                  142 	bit	7,a
+      000071 28 07                  143 	jr	Z, 00145$
+      000073 CB 7A                  144 	bit	7, d
+      000075 20 08                  145 	jr	NZ, 00146$
+      000077 BF                     146 	cp	a, a
+      000078 18 05                  147 	jr	00146$
+      00007A                        148 00145$:
+      00007A CB 7A                  149 	bit	7, d
+      00007C 28 01                  150 	jr	Z, 00146$
+      00007E 37                     151 	scf
+      00007F                        152 00146$:
+      00007F 30 45                  153 	jr	NC, 00113$
+                                    154 ;src/test_impl/gblink.c:30: receive_byte();
+      000081 C5                     155 	push	bc
+      000082 CDr00r00               156 	call	_receive_byte
+      000085 C1                     157 	pop	bc
+                                    158 ;src/test_impl/gblink.c:32: while (_io_status == IO_RECEIVING);
+      000086                        159 00101$:
+      000086 FAr00r00               160 	ld	a, (#__io_status)
+      000089 D6 02                  161 	sub	a, #0x02
+      00008B 28 F9                  162 	jr	Z, 00101$
+                                    163 ;src/test_impl/gblink.c:33: if (_io_status == IO_ERROR) {
+      00008D FAr00r00               164 	ld	a, (#__io_status)
+      000090 D6 04                  165 	sub	a, #0x04
+      000092 20 0F                  166 	jr	NZ, 00105$
+                                    167 ;src/test_impl/gblink.c:34: text_print_string_bkg(1, 4, "failed to comm...");
+      000094 11rC9r00               168 	ld	de, #___str_0
+      000097 D5                     169 	push	de
+      000098 21 01 04               170 	ld	hl, #0x401
+      00009B E5                     171 	push	hl
+      00009C CDr00r00               172 	call	_text_print_string_bkg
+      00009F E8 04                  173 	add	sp, #4
+                                    174 ;src/test_impl/gblink.c:35: break;
+      0000A1 18 23                  175 	jr	00113$
+      0000A3                        176 00105$:
+                                    177 ;src/test_impl/gblink.c:37: text_print_char_bkg(recv_x, recv_y, _io_in);
+      0000A3 C5                     178 	push	bc
+      0000A4 FAr00r00               179 	ld	a, (#__io_in)
+      0000A7 F5                     180 	push	af
+      0000A8 33                     181 	inc	sp
+      0000A9 C5                     182 	push	bc
+      0000AA CDr00r00               183 	call	_text_print_char_bkg
+      0000AD E8 03                  184 	add	sp, #3
+      0000AF C1                     185 	pop	bc
+                                    186 ;src/test_impl/gblink.c:38: if (_io_in == ' ') {
+      0000B0 FAr00r00               187 	ld	a, (#__io_in)
+      0000B3 D6 20                  188 	sub	a, #0x20
+      0000B5 20 05                  189 	jr	NZ, 00107$
+                                    190 ;src/test_impl/gblink.c:39: recv_y++;
+      0000B7 04                     191 	inc	b
+                                    192 ;src/test_impl/gblink.c:40: recv_x = 1;
+      0000B8 0E 01                  193 	ld	c, #0x01
+      0000BA 18 01                  194 	jr	00112$
+      0000BC                        195 00107$:
+                                    196 ;src/test_impl/gblink.c:42: recv_x++;
+      0000BC 0C                     197 	inc	c
+      0000BD                        198 00112$:
+                                    199 ;src/test_impl/gblink.c:28: for (int i = 0; i < 0x20; ++i)
+      0000BD F8 00                  200 	ldhl	sp,	#0
+      0000BF 34                     201 	inc	(hl)
+      0000C0 20 A2                  202 	jr	NZ, 00111$
+      0000C2 23                     203 	inc	hl
+      0000C3 34                     204 	inc	(hl)
+      0000C4 18 9E                  205 	jr	00111$
+      0000C6                        206 00113$:
+                                    207 ;src/test_impl/gblink.c:45: }
+      0000C6 33                     208 	inc	sp
+      0000C7 33                     209 	inc	sp
+      0000C8 C9                     210 	ret
+      0000C9                        211 ___str_0:
+      0000C9 66 61 69 6C 65 64 20   212 	.ascii "failed to comm..."
+             74 6F 20 63 6F 6D 6D
+             2E 2E 2E
+      0000DA 00                     213 	.db 0x00
+                                    214 ;src/test_impl/gblink.c:47: int gblink_test() {
+                                    215 ;	---------------------------------
+                                    216 ; Function gblink_test
+                                    217 ; ---------------------------------
+      0000DB                        218 _gblink_test::
+      0000DB E8 FA                  219 	add	sp, #-6
+                                    220 ;src/test_impl/gblink.c:48: PRINT_FUNC_INFO;
+      0000DD 11rBFr01               221 	ld	de, #___str_3
+      0000E0 D5                     222 	push	de
+      0000E1 11 30 00               223 	ld	de, #0x0030
+      0000E4 D5                     224 	push	de
+      0000E5 11rA8r01               225 	ld	de, #___str_2
+      0000E8 D5                     226 	push	de
+      0000E9 11r93r01               227 	ld	de, #___str_1
+      0000EC D5                     228 	push	de
+      0000ED CDr00r00               229 	call	_EMU_printf
+      0000F0 E8 08                  230 	add	sp, #8
+                                    231 ;src/test_impl/gblink.c:49: blank_display();
+      0000F2 CDr00r00               232 	call	_blank_display
+                                    233 ;src/test_impl/gblink.c:50: show_gblink_background();
+      0000F5 CDr00r00               234 	call	_show_gblink_background
+                                    235 ;src/test_impl/gblink.c:53: UBYTE start[4] = { 0x73, 0x74, 0x72, 0x74 };
+      0000F8 F8 00                  236 	ldhl	sp,	#0
+      0000FA 7D                     237 	ld	a, l
+      0000FB 54                     238 	ld	d, h
+      0000FC F8 04                  239 	ldhl	sp,	#4
+      0000FE 22                     240 	ld	(hl+), a
+      0000FF 7A                     241 	ld	a, d
+      000100 32                     242 	ld	(hl-), a
+      000101 2A                     243 	ld	a,	(hl+)
+      000102 66                     244 	ld	h, (hl)
+      000103 6F                     245 	ld	l, a
+      000104 36 73                  246 	ld	(hl), #0x73
+      000106 F8 04                  247 	ldhl	sp,	#4
+      000108 2A                     248 	ld	a, (hl+)
+      000109 4F                     249 	ld	c, a
+      00010A 3A                     250 	ld	a, (hl-)
+      00010B 47                     251 	ld	b, a
+      00010C 03                     252 	inc	bc
+      00010D 3E 74                  253 	ld	a, #0x74
+      00010F 02                     254 	ld	(bc), a
+      000110 2A                     255 	ld	a, (hl+)
+      000111 4F                     256 	ld	c, a
+      000112 3A                     257 	ld	a, (hl-)
+      000113 47                     258 	ld	b, a
+      000114 03                     259 	inc	bc
+      000115 03                     260 	inc	bc
+      000116 3E 72                  261 	ld	a, #0x72
+      000118 02                     262 	ld	(bc), a
+      000119 2A                     263 	ld	a, (hl+)
+      00011A 4F                     264 	ld	c, a
+      00011B 46                     265 	ld	b, (hl)
+      00011C 03                     266 	inc	bc
+      00011D 03                     267 	inc	bc
+      00011E 03                     268 	inc	bc
+      00011F 3E 74                  269 	ld	a, #0x74
+      000121 02                     270 	ld	(bc), a
+                                    271 ;src/test_impl/gblink.c:54: for (int i = 0; i < 4; ++i)
+      000122 01 00 00               272 	ld	bc, #0x0000
+      000125                        273 00108$:
+      000125 79                     274 	ld	a, c
+      000126 D6 04                  275 	sub	a, #0x04
+      000128 78                     276 	ld	a, b
+      000129 17                     277 	rla
+      00012A 3F                     278 	ccf
+      00012B 1F                     279 	rra
+      00012C DE 80                  280 	sbc	a, #0x80
+      00012E 30 45                  281 	jr	NC, 00106$
+                                    282 ;src/test_impl/gblink.c:56: _io_out = start[i];
+      000130 F8 04                  283 	ldhl	sp,	#4
+      000132 2A                     284 	ld	a,	(hl+)
+      000133 66                     285 	ld	h, (hl)
+      000134 6F                     286 	ld	l, a
+      000135 09                     287 	add	hl, bc
+      000136 5D                     288 	ld	e, l
+      000137 54                     289 	ld	d, h
+      000138 1A                     290 	ld	a, (de)
+      000139 EAr00r00               291 	ld	(#__io_out),a
+                                    292 ;src/test_impl/gblink.c:57: send_byte();
+      00013C C5                     293 	push	bc
+      00013D CDr00r00               294 	call	_send_byte
+      000140 C1                     295 	pop	bc
+                                    296 ;src/test_impl/gblink.c:58: while (_io_status == IO_SENDING) 
+      000141                        297 00101$:
+      000141 FAr00r00               298 	ld	a, (#__io_status)
+      000144 3D                     299 	dec	a
+      000145 28 FA                  300 	jr	Z, 00101$
+                                    301 ;src/test_impl/gblink.c:62: if (_io_status == IO_ERROR)
+      000147 FAr00r00               302 	ld	a, (#__io_status)
+      00014A D6 04                  303 	sub	a, #0x04
+      00014C 20 1A                  304 	jr	NZ, 00105$
+                                    305 ;src/test_impl/gblink.c:64: text_print_string_bkg(1, 4, "failed to comm...");
+      00014E 11rCBr01               306 	ld	de, #___str_4
+      000151 D5                     307 	push	de
+      000152 21 01 04               308 	ld	hl, #0x401
+      000155 E5                     309 	push	hl
+      000156 CDr00r00               310 	call	_text_print_string_bkg
+      000159 E8 04                  311 	add	sp, #4
+                                    312 ;src/test_impl/gblink.c:65: delay(2000);
+      00015B 11 D0 07               313 	ld	de, #0x07d0
+      00015E D5                     314 	push	de
+      00015F CDr00r00               315 	call	_delay
+      000162 E1                     316 	pop	hl
+                                    317 ;src/test_impl/gblink.c:66: return TEST_FAILED;
+      000163 11 69 00               318 	ld	de, #0x0069
+      000166 18 28                  319 	jr	00110$
+      000168                        320 00105$:
+                                    321 ;src/test_impl/gblink.c:68: delay(100);
+      000168 C5                     322 	push	bc
+      000169 11 64 00               323 	ld	de, #0x0064
+      00016C D5                     324 	push	de
+      00016D CDr00r00               325 	call	_delay
+      000170 E1                     326 	pop	hl
+      000171 C1                     327 	pop	bc
+                                    328 ;src/test_impl/gblink.c:54: for (int i = 0; i < 4; ++i)
+      000172 03                     329 	inc	bc
+      000173 18 B0                  330 	jr	00108$
+      000175                        331 00106$:
+                                    332 ;src/test_impl/gblink.c:71: text_print_string_bkg(1, 4, "initiated comm...");
+      000175 11rDDr01               333 	ld	de, #___str_5
+      000178 D5                     334 	push	de
+      000179 21 01 04               335 	ld	hl, #0x401
+      00017C E5                     336 	push	hl
+      00017D CDr00r00               337 	call	_text_print_string_bkg
+      000180 E8 04                  338 	add	sp, #4
+                                    339 ;src/test_impl/gblink.c:72: receive_data_str();
+      000182 CDr5Ar00               340 	call	_receive_data_str
+                                    341 ;src/test_impl/gblink.c:73: delay(1000);
+      000185 11 E8 03               342 	ld	de, #0x03e8
+      000188 D5                     343 	push	de
+      000189 CDr00r00               344 	call	_delay
+      00018C E1                     345 	pop	hl
+                                    346 ;src/test_impl/gblink.c:74: return TEST_PASSED;
+      00018D 11 25 00               347 	ld	de, #0x0025
+      000190                        348 00110$:
+                                    349 ;src/test_impl/gblink.c:75: } 
+      000190 E8 06                  350 	add	sp, #6
+      000192 C9                     351 	ret
+      000193                        352 ___str_1:
+      000193 5B 44 42 47 5D 20 28   353 	.ascii "[DBG] (%s:%d @ %s())"
+             25 73 3A 25 64 20 40
+             20 25 73 28 29 29
+      0001A7 00                     354 	.db 0x00
+      0001A8                        355 ___str_2:
+      0001A8 73 72 63 2F 74 65 73   356 	.ascii "src/test_impl/gblink.c"
+             74 5F 69 6D 70 6C 2F
+             67 62 6C 69 6E 6B 2E
+             63
+      0001BE 00                     357 	.db 0x00
+      0001BF                        358 ___str_3:
+      0001BF 67 62 6C 69 6E 6B 5F   359 	.ascii "gblink_test"
+             74 65 73 74
+      0001CA 00                     360 	.db 0x00
+      0001CB                        361 ___str_4:
+      0001CB 66 61 69 6C 65 64 20   362 	.ascii "failed to comm..."
+             74 6F 20 63 6F 6D 6D
+             2E 2E 2E
+      0001DC 00                     363 	.db 0x00
+      0001DD                        364 ___str_5:
+      0001DD 69 6E 69 74 69 61 74   365 	.ascii "initiated comm..."
+             65 64 20 63 6F 6D 6D
+             2E 2E 2E
+      0001EE 00                     366 	.db 0x00
+                                    367 	.area _CODE
+                                    368 	.area _INITIALIZER
+      000000                        369 __xinit____EMU_PROFILER_INIT:
+      000000r00r00                  370 	.dw _EMU_profiler_message
+                                    371 	.area _CABS (ABS)

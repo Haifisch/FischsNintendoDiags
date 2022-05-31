@@ -1,0 +1,139 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.1.6 #12539 (MINGW32)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module menu_arrow
+                                      6 	.optsdcc -mgbz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl b_menu_arrow_display
+                                     12 	.globl _menu_arrow_display
+                                     13 	.globl b___func_menu_arrow_display
+                                     14 	.globl ___func_menu_arrow_display
+                                     15 	.globl b___func_menu_arrow_tiles
+                                     16 	.globl ___func_menu_arrow_tiles
+                                     17 	.globl b___func_menu_arrow_palettes
+                                     18 	.globl ___func_menu_arrow_palettes
+                                     19 	.globl _set_sprite_palette
+                                     20 	.globl _set_sprite_data
+                                     21 	.globl _menu_arrow_tiles
+                                     22 	.globl _menu_arrow_palettes
+                                     23 ;--------------------------------------------------------
+                                     24 ; special function registers
+                                     25 ;--------------------------------------------------------
+                                     26 ;--------------------------------------------------------
+                                     27 ; ram data
+                                     28 ;--------------------------------------------------------
+                                     29 	.area _DATA
+                                     30 ;--------------------------------------------------------
+                                     31 ; ram data
+                                     32 ;--------------------------------------------------------
+                                     33 	.area _INITIALIZED
+                                     34 ;--------------------------------------------------------
+                                     35 ; absolute external ram data
+                                     36 ;--------------------------------------------------------
+                                     37 	.area _DABS (ABS)
+                                     38 ;--------------------------------------------------------
+                                     39 ; global & static initialisations
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _HOME
+                                     42 	.area _GSINIT
+                                     43 	.area _GSFINAL
+                                     44 	.area _GSINIT
+                                     45 ;--------------------------------------------------------
+                                     46 ; Home
+                                     47 ;--------------------------------------------------------
+                                     48 	.area _HOME
+                                     49 	.area _HOME
+                                     50 ;--------------------------------------------------------
+                                     51 ; code
+                                     52 ;--------------------------------------------------------
+                                     53 	.area _CODE_1
+                                     54 ;src/gfx/menu_arrow.c:7: BANKREF(menu_arrow_palettes)
+                                     55 ;	---------------------------------
+                                     56 ; Function __func_menu_arrow_palettes
+                                     57 ; ---------------------------------
+                           000001    58 	b___func_menu_arrow_palettes	= 1
+      000000                         59 ___func_menu_arrow_palettes::
+                                     60 	.local b___func_menu_arrow_palettes 
+                           000001    61 	___bank_menu_arrow_palettes = b___func_menu_arrow_palettes 
+                                     62 	.globl ___bank_menu_arrow_palettes 
+                                     63 ;src/gfx/menu_arrow.c:12: BANKREF(menu_arrow_tiles)
+                                     64 ;	---------------------------------
+                                     65 ; Function __func_menu_arrow_tiles
+                                     66 ; ---------------------------------
+                           000001    67 	b___func_menu_arrow_tiles	= 1
+      000000                         68 ___func_menu_arrow_tiles::
+                                     69 	.local b___func_menu_arrow_tiles 
+                           000001    70 	___bank_menu_arrow_tiles = b___func_menu_arrow_tiles 
+                                     71 	.globl ___bank_menu_arrow_tiles 
+                                     72 ;src/gfx/menu_arrow.c:17: BANKREF(menu_arrow_display)
+                                     73 ;	---------------------------------
+                                     74 ; Function __func_menu_arrow_display
+                                     75 ; ---------------------------------
+                           000001    76 	b___func_menu_arrow_display	= 1
+      000000                         77 ___func_menu_arrow_display::
+                                     78 	.local b___func_menu_arrow_display 
+                           000001    79 	___bank_menu_arrow_display = b___func_menu_arrow_display 
+                                     80 	.globl ___bank_menu_arrow_display 
+                                     81 ;src/gfx/menu_arrow.c:18: void menu_arrow_display() BANKED
+                                     82 ;	---------------------------------
+                                     83 ; Function menu_arrow_display
+                                     84 ; ---------------------------------
+                           000001    85 	b_menu_arrow_display	= 1
+      000000                         86 _menu_arrow_display::
+                                     87 ;src/gfx/menu_arrow.c:20: SPRITES_8x8;
+      000000 F0r00                   88 	ldh	a, (_LCDC_REG + 0)
+      000002 E6 FB                   89 	and	a, #0xfb
+      000004 E0r00                   90 	ldh	(_LCDC_REG + 0), a
+                                     91 ;src/gfx/menu_arrow.c:21: set_sprite_palette(0, 1, menu_arrow_palettes);
+      000006 11r2Br00                92 	ld	de, #_menu_arrow_palettes
+      000009 D5                      93 	push	de
+      00000A AF                      94 	xor	a, a
+      00000B 3C                      95 	inc	a
+      00000C F5                      96 	push	af
+      00000D CDr00r00                97 	call	_set_sprite_palette
+      000010 E8 04                   98 	add	sp, #4
+                                     99 ;src/gfx/menu_arrow.c:22: set_sprite_data(0, 8, menu_arrow_tiles);
+      000012 11r33r00               100 	ld	de, #_menu_arrow_tiles
+      000015 D5                     101 	push	de
+      000016 21 00 08               102 	ld	hl, #0x800
+      000019 E5                     103 	push	hl
+      00001A CDr00r00               104 	call	_set_sprite_data
+      00001D E8 04                  105 	add	sp, #4
+                                    106 ;X:/gbc_hacks/gbdk/include/gb/gb.h:1447: shadow_OAM[nb].tile=tile;
+      00001F 21r02r00               107 	ld	hl, #(_shadow_OAM + 2)
+      000022 36 00                  108 	ld	(hl), #0x00
+                                    109 ;src/gfx/menu_arrow.c:24: SHOW_SPRITES;
+      000024 F0r00                  110 	ldh	a, (_LCDC_REG + 0)
+      000026 F6 02                  111 	or	a, #0x02
+      000028 E0r00                  112 	ldh	(_LCDC_REG + 0), a
+                                    113 ;src/gfx/menu_arrow.c:25: }
+      00002A C9                     114 	ret
+      00002B                        115 _menu_arrow_palettes:
+      00002B 1F 00                  116 	.dw #0x001f
+      00002D 00 00                  117 	.dw #0x0000
+      00002F 0A 00                  118 	.dw #0x000a
+      000031 1F 00                  119 	.dw #0x001f
+      000033                        120 _menu_arrow_tiles:
+      000033 10                     121 	.db #0x10	; 16
+      000034 00                     122 	.db #0x00	; 0
+      000035 30                     123 	.db #0x30	; 48	'0'
+      000036 00                     124 	.db #0x00	; 0
+      000037 70                     125 	.db #0x70	; 112	'p'
+      000038 00                     126 	.db #0x00	; 0
+      000039 FF                     127 	.db #0xff	; 255
+      00003A 00                     128 	.db #0x00	; 0
+      00003B FF                     129 	.db #0xff	; 255
+      00003C 00                     130 	.db #0x00	; 0
+      00003D 70                     131 	.db #0x70	; 112	'p'
+      00003E 00                     132 	.db #0x00	; 0
+      00003F 30                     133 	.db #0x30	; 48	'0'
+      000040 00                     134 	.db #0x00	; 0
+      000041 10                     135 	.db #0x10	; 16
+      000042 00                     136 	.db #0x00	; 0
+                                    137 	.area _CODE_1
+                                    138 	.area _INITIALIZER
+                                    139 	.area _CABS (ABS)

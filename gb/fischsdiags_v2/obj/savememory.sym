@@ -1,0 +1,98 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000000 L
+    _EMU_printf                                                    ****** GX
+    _EMU_profiler_message                                          ****** GX
+  2 ___EMU_PROFILER_INIT                                           000000 R
+    ___sdcc_call_hl                                                ****** GX
+  0 ___str_0                                                       00011C R
+  0 ___str_1                                                       000131 R
+  0 ___str_10                                                      0002EF R
+  0 ___str_11                                                      0002F3 R
+  0 ___str_12                                                      0002F7 R
+  0 ___str_13                                                      0002FB R
+  0 ___str_14                                                      0002FF R
+  0 ___str_15                                                      000323 R
+  0 ___str_16                                                      000338 R
+  0 ___str_17                                                      000349 R
+  0 ___str_18                                                      00038D R
+  0 ___str_19                                                      00039C R
+  0 ___str_2                                                       000142 R
+  0 ___str_20                                                      00060C R
+  0 ___str_21                                                      000621 R
+  0 ___str_22                                                      000632 R
+  0 ___str_23                                                      00063B R
+  0 ___str_24                                                      00064B R
+  0 ___str_25                                                      000654 R
+  0 ___str_26                                                      00065E R
+  0 ___str_27                                                      00066A R
+  0 ___str_28                                                      000673 R
+  0 ___str_29                                                      000682 R
+  0 ___str_3                                                       000153 R
+  0 ___str_30                                                      000694 R
+  0 ___str_31                                                      0006A8 R
+  0 ___str_32                                                      0006BC R
+  0 ___str_4                                                       000156 R
+  0 ___str_5                                                       0002B3 R
+  0 ___str_6                                                       0002C8 R
+  0 ___str_7                                                       0002D9 R
+  0 ___str_8                                                       0002E6 R
+  0 ___str_9                                                       0002EB R
+  7 __xinit____EMU_PROFILER_INIT                                   000000 R
+  7 __xinit__endData                                               000006 R
+  7 __xinit__firstRunByte                                          000002 R
+  7 __xinit__inc_hiram_var                                         00000C R
+  7 __xinit__inc_ram_var                                           00000A R
+  7 __xinit__memTestCounter                                        000008 R
+  7 __xinit__results                                               000004 R
+  0 _check_savemem                                                 000302 GR
+    _delay                                                         ****** GX
+  2 _endData                                                       000006 GR
+  2 _firstRunByte                                                  000002 GR
+    _hiram_buffer                                               =  00FFA0 G
+    _hiramcpy                                                      ****** GX
+  0 _inc                                                           000000 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 _inc_end                                                       000008 GR
+    _inc_hiram                                                     ****** GX
+  2 _inc_hiram_var                                                 00000C GR
+    _inc_ram                                                       ****** GX
+  2 _inc_ram_var                                                   00000A GR
+  0 _init_savemem                                                  000159 GR
+  2 _memTestCounter                                                000008 GR
+  0 _mem_test                                                      0003AA GR
+    _memcpy                                                        ****** GX
+    _memset                                                        ****** GX
+  0 _print_counter                                                 000357 GR
+    _ram_buffer                                                 =  00D000 G
+  2 _results                                                       000004 GR
+  0 _save_test_result                                              000009 GR
+    _sprintf                                                       ****** GX
+    _text_print_string_bkg                                         ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 3.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size    6C8   flags    0
+   1 _DATA                                      size      0   flags    0
+   2 _INITIALIZED                               size      E   flags    0
+   3 _DABS                                      size      0   flags    8
+   4 _HOME                                      size      0   flags    0
+   5 _GSINIT                                    size      0   flags    0
+   6 _GSFINAL                                   size      0   flags    0
+   7 _INITIALIZER                               size      E   flags    0
+   8 _CABS                                      size      0   flags    8
+

@@ -1,0 +1,359 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.1.6 #12539 (MINGW32)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	.optsdcc -mgbz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _main
+                                     12 	.globl _send_data_str
+                                     13 	.globl _wait_for_start
+                                     14 	.globl _cls
+                                     15 	.globl _puts
+                                     16 	.globl _printf
+                                     17 	.globl _wait_vbl_done
+                                     18 	.globl _delay
+                                     19 	.globl _receive_byte
+                                     20 	.globl _send_byte
+                                     21 	.globl _test_data_str
+                                     22 ;--------------------------------------------------------
+                                     23 ; special function registers
+                                     24 ;--------------------------------------------------------
+                                     25 ;--------------------------------------------------------
+                                     26 ; ram data
+                                     27 ;--------------------------------------------------------
+                                     28 	.area _DATA
+                                     29 ;--------------------------------------------------------
+                                     30 ; ram data
+                                     31 ;--------------------------------------------------------
+                                     32 	.area _INITIALIZED
+                                     33 ;--------------------------------------------------------
+                                     34 ; absolute external ram data
+                                     35 ;--------------------------------------------------------
+                                     36 	.area _DABS (ABS)
+                                     37 ;--------------------------------------------------------
+                                     38 ; global & static initialisations
+                                     39 ;--------------------------------------------------------
+                                     40 	.area _HOME
+                                     41 	.area _GSINIT
+                                     42 	.area _GSFINAL
+                                     43 	.area _GSINIT
+                                     44 ;--------------------------------------------------------
+                                     45 ; Home
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _HOME
+                                     48 	.area _HOME
+                                     49 ;--------------------------------------------------------
+                                     50 ; code
+                                     51 ;--------------------------------------------------------
+                                     52 	.area _CODE
+                                     53 ;src/main.c:9: void wait_for_start() 
+                                     54 ;	---------------------------------
+                                     55 ; Function wait_for_start
+                                     56 ; ---------------------------------
+      000000                         57 _wait_for_start::
+      000000 E8 FA                   58 	add	sp, #-6
+                                     59 ;src/main.c:11: UBYTE start[4] = { 0x73, 0x74, 0x72, 0x74 };
+      000002 F8 00                   60 	ldhl	sp,	#0
+      000004 7D                      61 	ld	a, l
+      000005 54                      62 	ld	d, h
+      000006 F8 04                   63 	ldhl	sp,	#4
+      000008 22                      64 	ld	(hl+), a
+      000009 7A                      65 	ld	a, d
+      00000A 32                      66 	ld	(hl-), a
+      00000B 2A                      67 	ld	a,	(hl+)
+      00000C 66                      68 	ld	h, (hl)
+      00000D 6F                      69 	ld	l, a
+      00000E 36 73                   70 	ld	(hl), #0x73
+      000010 F8 04                   71 	ldhl	sp,	#4
+      000012 2A                      72 	ld	a, (hl+)
+      000013 4F                      73 	ld	c, a
+      000014 3A                      74 	ld	a, (hl-)
+      000015 47                      75 	ld	b, a
+      000016 03                      76 	inc	bc
+      000017 3E 74                   77 	ld	a, #0x74
+      000019 02                      78 	ld	(bc), a
+      00001A 2A                      79 	ld	a, (hl+)
+      00001B 4F                      80 	ld	c, a
+      00001C 3A                      81 	ld	a, (hl-)
+      00001D 47                      82 	ld	b, a
+      00001E 03                      83 	inc	bc
+      00001F 03                      84 	inc	bc
+      000020 3E 72                   85 	ld	a, #0x72
+      000022 02                      86 	ld	(bc), a
+      000023 2A                      87 	ld	a, (hl+)
+      000024 4F                      88 	ld	c, a
+      000025 46                      89 	ld	b, (hl)
+      000026 03                      90 	inc	bc
+      000027 03                      91 	inc	bc
+      000028 03                      92 	inc	bc
+      000029 3E 74                   93 	ld	a, #0x74
+      00002B 02                      94 	ld	(bc), a
+                                     95 ;src/main.c:13: for (int i = 0; i < 4; ++i)
+      00002C 01 00 00                96 	ld	bc, #0x0000
+      00002F                         97 00110$:
+      00002F 79                      98 	ld	a, c
+      000030 D6 04                   99 	sub	a, #0x04
+      000032 78                     100 	ld	a, b
+      000033 17                     101 	rla
+      000034 3F                     102 	ccf
+      000035 1F                     103 	rra
+      000036 DE 80                  104 	sbc	a, #0x80
+      000038 30 42                  105 	jr	NC, 00108$
+                                    106 ;src/main.c:15: receive_byte();
+      00003A C5                     107 	push	bc
+      00003B CDr00r00               108 	call	_receive_byte
+      00003E C1                     109 	pop	bc
+                                    110 ;src/main.c:17: while (_io_status == IO_RECEIVING);
+      00003F                        111 00101$:
+      00003F FAr00r00               112 	ld	a, (#__io_status)
+      000042 D6 02                  113 	sub	a, #0x02
+      000044 28 F9                  114 	jr	Z, 00101$
+                                    115 ;src/main.c:18: if (_io_status == IO_ERROR) {
+      000046 FAr00r00               116 	ld	a, (#__io_status)
+      000049 D6 04                  117 	sub	a, #0x04
+      00004B 20 0A                  118 	jr	NZ, 00105$
+                                    119 ;src/main.c:19: printf("i/o error!\n");
+      00004D 11rA7r00               120 	ld	de, #___str_1
+      000050 D5                     121 	push	de
+      000051 CDr00r00               122 	call	_puts
+      000054 E1                     123 	pop	hl
+                                    124 ;src/main.c:20: break;
+      000055 18 25                  125 	jr	00108$
+      000057                        126 00105$:
+                                    127 ;src/main.c:22: if (_io_in == start[i]) {
+      000057 F8 04                  128 	ldhl	sp,	#4
+      000059 2A                     129 	ld	a,	(hl+)
+      00005A 66                     130 	ld	h, (hl)
+      00005B 6F                     131 	ld	l, a
+      00005C 09                     132 	add	hl, bc
+      00005D 5D                     133 	ld	e, l
+      00005E 54                     134 	ld	d, h
+      00005F 1A                     135 	ld	a, (de)
+      000060 5F                     136 	ld	e, a
+      000061 FAr00r00               137 	ld	a, (#__io_in)
+      000064 93                     138 	sub	a, e
+      000065 20 12                  139 	jr	NZ, 00111$
+                                    140 ;src/main.c:23: printf("%c", _io_in);
+      000067 21r00r00               141 	ld	hl, #__io_in
+      00006A 5E                     142 	ld	e, (hl)
+      00006B 16 00                  143 	ld	d, #0x00
+      00006D C5                     144 	push	bc
+      00006E D5                     145 	push	de
+      00006F 11rB2r00               146 	ld	de, #___str_2
+      000072 D5                     147 	push	de
+      000073 CDr00r00               148 	call	_printf
+      000076 E8 04                  149 	add	sp, #4
+      000078 C1                     150 	pop	bc
+      000079                        151 00111$:
+                                    152 ;src/main.c:13: for (int i = 0; i < 4; ++i)
+      000079 03                     153 	inc	bc
+      00007A 18 B3                  154 	jr	00110$
+      00007C                        155 00108$:
+                                    156 ;src/main.c:26: printf("\n"); 
+      00007C 11rB5r00               157 	ld	de, #___str_4
+      00007F D5                     158 	push	de
+      000080 CDr00r00               159 	call	_puts
+      000083 E1                     160 	pop	hl
+                                    161 ;src/main.c:27: }
+      000084 E8 06                  162 	add	sp, #6
+      000086 C9                     163 	ret
+      000087                        164 _test_data_str:
+      000087 46                     165 	.db #0x46	; 70	'F'
+      000088 49                     166 	.db #0x49	; 73	'I'
+      000089 53                     167 	.db #0x53	; 83	'S'
+      00008A 43                     168 	.db #0x43	; 67	'C'
+      00008B 48                     169 	.db #0x48	; 72	'H'
+      00008C 53                     170 	.db #0x53	; 83	'S'
+      00008D 20                     171 	.db #0x20	; 32
+      00008E 44                     172 	.db #0x44	; 68	'D'
+      00008F 49                     173 	.db #0x49	; 73	'I'
+      000090 41                     174 	.db #0x41	; 65	'A'
+      000091 47                     175 	.db #0x47	; 71	'G'
+      000092 53                     176 	.db #0x53	; 83	'S'
+      000093 20                     177 	.db #0x20	; 32
+      000094 43                     178 	.db #0x43	; 67	'C'
+      000095 4F                     179 	.db #0x4f	; 79	'O'
+      000096 4D                     180 	.db #0x4d	; 77	'M'
+      000097 4D                     181 	.db #0x4d	; 77	'M'
+      000098 20                     182 	.db #0x20	; 32
+      000099 54                     183 	.db #0x54	; 84	'T'
+      00009A 45                     184 	.db #0x45	; 69	'E'
+      00009B 53                     185 	.db #0x53	; 83	'S'
+      00009C 54                     186 	.db #0x54	; 84	'T'
+      00009D 20                     187 	.db #0x20	; 32
+      00009E 44                     188 	.db #0x44	; 68	'D'
+      00009F 41                     189 	.db #0x41	; 65	'A'
+      0000A0 54                     190 	.db #0x54	; 84	'T'
+      0000A1 41                     191 	.db #0x41	; 65	'A'
+      0000A2 20                     192 	.db #0x20	; 32
+      0000A3 4C                     193 	.db #0x4c	; 76	'L'
+      0000A4 49                     194 	.db #0x49	; 73	'I'
+      0000A5 4E                     195 	.db #0x4e	; 78	'N'
+      0000A6 4B                     196 	.db #0x4b	; 75	'K'
+      0000A7                        197 ___str_1:
+      0000A7 69 2F 6F 20 65 72 72   198 	.ascii "i/o error!"
+             6F 72 21
+      0000B1 00                     199 	.db 0x00
+      0000B2                        200 ___str_2:
+      0000B2 25 63                  201 	.ascii "%c"
+      0000B4 00                     202 	.db 0x00
+      0000B5                        203 ___str_4:
+      0000B5 00                     204 	.db 0x00
+                                    205 ;src/main.c:29: void send_data_str() 
+                                    206 ;	---------------------------------
+                                    207 ; Function send_data_str
+                                    208 ; ---------------------------------
+      0000B6                        209 _send_data_str::
+      0000B6 3B                     210 	dec	sp
+                                    211 ;src/main.c:31: for (int i = 0; i < 0x20; ++i)
+      0000B7 01 00 00               212 	ld	bc, #0x0000
+      0000BA                        213 00111$:
+      0000BA 79                     214 	ld	a, c
+      0000BB D6 20                  215 	sub	a, #0x20
+      0000BD 78                     216 	ld	a, b
+      0000BE 17                     217 	rla
+      0000BF 3F                     218 	ccf
+      0000C0 1F                     219 	rra
+      0000C1 DE 80                  220 	sbc	a, #0x80
+      0000C3 30 5B                  221 	jr	NC, 00109$
+                                    222 ;src/main.c:33: _io_out = test_data_str[i];
+      0000C5 21r87r00               223 	ld	hl, #_test_data_str
+      0000C8 09                     224 	add	hl, bc
+      0000C9 7E                     225 	ld	a, (hl)
+      0000CA EAr00r00               226 	ld	(#__io_out),a
+                                    227 ;src/main.c:34: send_byte();
+      0000CD C5                     228 	push	bc
+      0000CE CDr00r00               229 	call	_send_byte
+      0000D1 C1                     230 	pop	bc
+                                    231 ;src/main.c:35: while(_io_status == IO_SENDING);
+      0000D2                        232 00101$:
+      0000D2 FAr00r00               233 	ld	a, (#__io_status)
+      0000D5 3D                     234 	dec	a
+      0000D6 28 FA                  235 	jr	Z, 00101$
+                                    236 ;src/main.c:36: if (_io_status == IO_ERROR) {
+      0000D8 FAr00r00               237 	ld	a, (#__io_status)
+      0000DB D6 04                  238 	sub	a, #0x04
+      0000DD 20 0A                  239 	jr	NZ, 00105$
+                                    240 ;src/main.c:37: printf("i/o error!\n");
+      0000DF 11r2Ar01               241 	ld	de, #___str_6
+      0000E2 D5                     242 	push	de
+      0000E3 CDr00r00               243 	call	_puts
+      0000E6 E1                     244 	pop	hl
+                                    245 ;src/main.c:38: break;
+      0000E7 18 37                  246 	jr	00109$
+      0000E9                        247 00105$:
+                                    248 ;src/main.c:40: if (test_data_str[i] == 0x20) {
+      0000E9 21r87r00               249 	ld	hl, #_test_data_str
+      0000EC 09                     250 	add	hl, bc
+      0000ED 7E                     251 	ld	a, (hl)
+      0000EE F8 00                  252 	ldhl	sp,#0
+      0000F0 77                     253 	ld	(hl), a
+      0000F1 7E                     254 	ld	a, (hl)
+      0000F2 D6 20                  255 	sub	a, #0x20
+      0000F4 20 0C                  256 	jr	NZ, 00107$
+                                    257 ;src/main.c:41: printf("\n");
+      0000F6 C5                     258 	push	bc
+      0000F7 11r35r01               259 	ld	de, #___str_8
+      0000FA D5                     260 	push	de
+      0000FB CDr00r00               261 	call	_puts
+      0000FE E1                     262 	pop	hl
+      0000FF C1                     263 	pop	bc
+      000100 18 11                  264 	jr	00108$
+      000102                        265 00107$:
+                                    266 ;src/main.c:43: printf("%c", test_data_str[i]);
+      000102 F8 00                  267 	ldhl	sp,	#0
+      000104 5E                     268 	ld	e, (hl)
+      000105 16 00                  269 	ld	d, #0x00
+      000107 C5                     270 	push	bc
+      000108 D5                     271 	push	de
+      000109 11r36r01               272 	ld	de, #___str_9
+      00010C D5                     273 	push	de
+      00010D CDr00r00               274 	call	_printf
+      000110 E8 04                  275 	add	sp, #4
+      000112 C1                     276 	pop	bc
+      000113                        277 00108$:
+                                    278 ;src/main.c:45: delay(100);
+      000113 C5                     279 	push	bc
+      000114 11 64 00               280 	ld	de, #0x0064
+      000117 D5                     281 	push	de
+      000118 CDr00r00               282 	call	_delay
+      00011B E1                     283 	pop	hl
+      00011C C1                     284 	pop	bc
+                                    285 ;src/main.c:31: for (int i = 0; i < 0x20; ++i)
+      00011D 03                     286 	inc	bc
+      00011E 18 9A                  287 	jr	00111$
+      000120                        288 00109$:
+                                    289 ;src/main.c:47: printf("\n"); 
+      000120 11r35r01               290 	ld	de, #___str_8
+      000123 D5                     291 	push	de
+      000124 CDr00r00               292 	call	_puts
+      000127 E1                     293 	pop	hl
+                                    294 ;src/main.c:48: }
+      000128 33                     295 	inc	sp
+      000129 C9                     296 	ret
+      00012A                        297 ___str_6:
+      00012A 69 2F 6F 20 65 72 72   298 	.ascii "i/o error!"
+             6F 72 21
+      000134 00                     299 	.db 0x00
+      000135                        300 ___str_8:
+      000135 00                     301 	.db 0x00
+      000136                        302 ___str_9:
+      000136 25 63                  303 	.ascii "%c"
+      000138 00                     304 	.db 0x00
+                                    305 ;src/main.c:51: void main(void)
+                                    306 ;	---------------------------------
+                                    307 ; Function main
+                                    308 ; ---------------------------------
+      000139                        309 _main::
+                                    310 ;src/main.c:54: while(1) {
+      000139                        311 00102$:
+                                    312 ;src/main.c:55: cls();
+      000139 CDr00r00               313 	call	_cls
+                                    314 ;src/main.c:56: printf("waiting for init\n");
+      00013C 11r67r01               315 	ld	de, #___str_12
+      00013F D5                     316 	push	de
+      000140 CDr00r00               317 	call	_puts
+      000143 E1                     318 	pop	hl
+                                    319 ;src/main.c:57: wait_for_start();
+      000144 CDr00r00               320 	call	_wait_for_start
+                                    321 ;src/main.c:58: printf("received init!\nsending big string\n");
+      000147 11r78r01               322 	ld	de, #___str_14
+      00014A D5                     323 	push	de
+      00014B CDr00r00               324 	call	_puts
+      00014E E1                     325 	pop	hl
+                                    326 ;src/main.c:59: delay(100);
+      00014F 11 64 00               327 	ld	de, #0x0064
+      000152 D5                     328 	push	de
+      000153 CDr00r00               329 	call	_delay
+      000156 E1                     330 	pop	hl
+                                    331 ;src/main.c:60: send_data_str();
+      000157 CDrB6r00               332 	call	_send_data_str
+                                    333 ;src/main.c:61: delay(5000);
+      00015A 11 88 13               334 	ld	de, #0x1388
+      00015D D5                     335 	push	de
+      00015E CDr00r00               336 	call	_delay
+      000161 E1                     337 	pop	hl
+                                    338 ;src/main.c:62: wait_vbl_done();
+      000162 CDr00r00               339 	call	_wait_vbl_done
+                                    340 ;src/main.c:64: }
+      000165 18 D2                  341 	jr	00102$
+      000167                        342 ___str_12:
+      000167 77 61 69 74 69 6E 67   343 	.ascii "waiting for init"
+             20 66 6F 72 20 69 6E
+             69 74
+      000177 00                     344 	.db 0x00
+      000178                        345 ___str_14:
+      000178 72 65 63 65 69 76 65   346 	.ascii "received init!"
+             64 20 69 6E 69 74 21
+      000186 0A                     347 	.db 0x0a
+      000187 73 65 6E 64 69 6E 67   348 	.ascii "sending big string"
+             20 62 69 67 20 73 74
+             72 69 6E 67
+      000199 00                     349 	.db 0x00
+                                    350 	.area _CODE
+                                    351 	.area _INITIALIZER
+                                    352 	.area _CABS (ABS)

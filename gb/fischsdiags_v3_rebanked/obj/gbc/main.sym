@@ -1,0 +1,107 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000000 L
+  2 _CURRENT_INDEX                                                 00000B GR
+    _DIV_REG                                                       ****** GX
+    _EMU_printf                                                    ****** GX
+    _EMU_profiler_message                                          ****** GX
+    _LCDC_REG                                                      ****** GX
+  2 _MENU_ARROW_START_X                                            000002 GR
+  2 _MENU_ARROW_START_Y                                            000003 GR
+  2 _MENU_ARROW_X_FOR_INDEX                                        000004 GR
+  2 _MENU_INDEX_MAX                                                00000A GR
+    _NR10_REG                                                      ****** GX
+    _NR11_REG                                                      ****** GX
+    _NR12_REG                                                      ****** GX
+    _NR13_REG                                                      ****** GX
+    _NR14_REG                                                      ****** GX
+    _NR50_REG                                                      ****** GX
+    _NR51_REG                                                      ****** GX
+    _NR52_REG                                                      ****** GX
+  2 ___EMU_PROFILER_INIT                                           000000 R
+    ___sdcc_bcall_ehl                                              ****** GX
+  7 ___str_0                                                       0000B7 R
+  7 ___str_1                                                       0000C8 R
+  7 ___str_2                                                       0000D8 R
+  7 ___str_3                                                       0001B5 R
+  7 ___str_4                                                       0001D1 R
+  7 ___str_5                                                       0001DC R
+  7 ___str_6                                                       0001E7 R
+  7 ___str_7                                                       0003D1 R
+  7 ___str_8                                                       0003E2 R
+  7 ___str_9                                                       0003FE R
+    __current_bank                                                 ****** GX
+  8 __xinit__CURRENT_INDEX                                         00000B R
+  8 __xinit__MENU_ARROW_START_X                                    000002 R
+  8 __xinit__MENU_ARROW_START_Y                                    000003 R
+  8 __xinit__MENU_ARROW_X_FOR_INDEX                                000004 R
+  8 __xinit__MENU_INDEX_MAX                                        00000A R
+  8 __xinit____EMU_PROFILER_INIT                                   000000 R
+    _ask_user_pass_or_fail                                         ****** GX
+  7 _audio_test                                                    000000 GR
+    _blank_display                                                 ****** GX
+    _button_test                                                   ****** GX
+    _check_savemem                                                 ****** GX
+    _delay                                                         ****** GX
+    _display_test                                                  ****** GX
+  7 _double_rumble                                                 0001F9 GR
+    _gblink_test                                                   ****** GX
+    _initarand                                                     ****** GX
+    _joypad                                                        ****** GX
+  7 _main                                                          000232 GR
+    _mem_test                                                      ****** GX
+    _menu_arrow_display                                            ****** GX
+    _menu_background_display                                       ****** GX
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _reset                                                         ****** GX
+  1 _rng_seed                                                      000000 GR
+    _save_test_result                                              ****** GX
+    _set_interrupts                                                ****** GX
+    _shadow_OAM                                                    ****** GX
+  7 _start_test                                                    0000E1 GR
+    _superuser_enter_hostmode                                      ****** GX
+    _superuser_hold                                                ****** GX
+    _text_load_font                                                ****** GX
+    _text_print_string_bkg                                         ****** GX
+    _wait_vbl_done                                                 ****** GX
+    _waitpadup                                                     ****** GX
+    b_ask_user_pass_or_fail                                        ****** GX
+    b_blank_display                                                ****** GX
+    b_button_test                                                  ****** GX
+    b_display_test                                                 ****** GX
+    b_gblink_test                                                  ****** GX
+    b_mem_test                                                     ****** GX
+    b_menu_arrow_display                                           ****** GX
+    b_menu_background_display                                      ****** GX
+    b_superuser_enter_hostmode                                     ****** GX
+    b_superuser_hold                                               ****** GX
+    b_text_load_font                                               ****** GX
+    b_text_print_string_bkg                                        ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 3.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 _DATA                                      size      2   flags    0
+   2 _INITIALIZED                               size      C   flags    0
+   3 _DABS                                      size      0   flags    8
+   4 _HOME                                      size      0   flags    0
+   5 _GSINIT                                    size      0   flags    0
+   6 _GSFINAL                                   size      0   flags    0
+   7 _CODE_1                                    size    422   flags    0
+   8 _INITIALIZER                               size      C   flags    0
+   9 _CABS                                      size      0   flags    8
+

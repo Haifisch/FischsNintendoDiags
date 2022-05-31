@@ -1,0 +1,747 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.1.6 #12539 (MINGW32)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	.optsdcc -mgbz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _main
+                                     12 	.globl _double_rumble
+                                     13 	.globl _start_test
+                                     14 	.globl _audio_test
+                                     15 	.globl b_superuser_enter_hostmode
+                                     16 	.globl _superuser_enter_hostmode
+                                     17 	.globl b_superuser_hold
+                                     18 	.globl _superuser_hold
+                                     19 	.globl b_gblink_test
+                                     20 	.globl _gblink_test
+                                     21 	.globl b_mem_test
+                                     22 	.globl _mem_test
+                                     23 	.globl b_display_test
+                                     24 	.globl _display_test
+                                     25 	.globl b_button_test
+                                     26 	.globl _button_test
+                                     27 	.globl b_text_print_string_bkg
+                                     28 	.globl _text_print_string_bkg
+                                     29 	.globl b_text_load_font
+                                     30 	.globl _text_load_font
+                                     31 	.globl _save_test_result
+                                     32 	.globl _check_savemem
+                                     33 	.globl b_ask_user_pass_or_fail
+                                     34 	.globl _ask_user_pass_or_fail
+                                     35 	.globl b_blank_display
+                                     36 	.globl _blank_display
+                                     37 	.globl b_menu_arrow_display
+                                     38 	.globl _menu_arrow_display
+                                     39 	.globl b_menu_background_display
+                                     40 	.globl _menu_background_display
+                                     41 	.globl _wait_vbl_done
+                                     42 	.globl _reset
+                                     43 	.globl _set_interrupts
+                                     44 	.globl _waitpadup
+                                     45 	.globl _joypad
+                                     46 	.globl _delay
+                                     47 	.globl _EMU_printf
+                                     48 	.globl _initarand
+                                     49 	.globl _CURRENT_INDEX
+                                     50 	.globl _MENU_INDEX_MAX
+                                     51 	.globl _MENU_ARROW_X_FOR_INDEX
+                                     52 	.globl _MENU_ARROW_START_Y
+                                     53 	.globl _MENU_ARROW_START_X
+                                     54 	.globl _rng_seed
+                                     55 ;--------------------------------------------------------
+                                     56 ; special function registers
+                                     57 ;--------------------------------------------------------
+                                     58 ;--------------------------------------------------------
+                                     59 ; ram data
+                                     60 ;--------------------------------------------------------
+                                     61 	.area _DATA
+      000000                         62 _rng_seed::
+      000000                         63 	.ds 2
+                                     64 ;--------------------------------------------------------
+                                     65 ; ram data
+                                     66 ;--------------------------------------------------------
+                                     67 	.area _INITIALIZED
+      000000                         68 ___EMU_PROFILER_INIT:
+      000000                         69 	.ds 2
+      000002                         70 _MENU_ARROW_START_X::
+      000002                         71 	.ds 1
+      000003                         72 _MENU_ARROW_START_Y::
+      000003                         73 	.ds 1
+      000004                         74 _MENU_ARROW_X_FOR_INDEX::
+      000004                         75 	.ds 6
+      00000A                         76 _MENU_INDEX_MAX::
+      00000A                         77 	.ds 1
+      00000B                         78 _CURRENT_INDEX::
+      00000B                         79 	.ds 1
+                                     80 ;--------------------------------------------------------
+                                     81 ; absolute external ram data
+                                     82 ;--------------------------------------------------------
+                                     83 	.area _DABS (ABS)
+                                     84 ;--------------------------------------------------------
+                                     85 ; global & static initialisations
+                                     86 ;--------------------------------------------------------
+                                     87 	.area _HOME
+                                     88 	.area _GSINIT
+                                     89 	.area _GSFINAL
+                                     90 	.area _GSINIT
+                                     91 ;--------------------------------------------------------
+                                     92 ; Home
+                                     93 ;--------------------------------------------------------
+                                     94 	.area _HOME
+                                     95 	.area _HOME
+                                     96 ;--------------------------------------------------------
+                                     97 ; code
+                                     98 ;--------------------------------------------------------
+                                     99 	.area _CODE_1
+                                    100 ;src/main.c:39: int audio_test()
+                                    101 ;	---------------------------------
+                                    102 ; Function audio_test
+                                    103 ; ---------------------------------
+      000000                        104 _audio_test::
+                                    105 ;src/main.c:41: blank_display();
+      000000 1Er00                  106 	ld	e, #b_blank_display
+      000002 21r00r00               107 	ld	hl, #_blank_display
+      000005 CDr00r00               108 	call	___sdcc_bcall_ehl
+                                    109 ;src/main.c:42: text_load_font();
+      000008 1Er00                  110 	ld	e, #b_text_load_font
+      00000A 21r00r00               111 	ld	hl, #_text_load_font
+      00000D CDr00r00               112 	call	___sdcc_bcall_ehl
+                                    113 ;src/main.c:43: text_print_string_bkg(0, 2, "Playing sound...");
+      000010 11rB7r00               114 	ld	de, #___str_0
+      000013 D5                     115 	push	de
+      000014 21 00 02               116 	ld	hl, #0x200
+      000017 E5                     117 	push	hl
+      000018 1Er00                  118 	ld	e, #b_text_print_string_bkg
+      00001A 21r00r00               119 	ld	hl, #_text_print_string_bkg
+      00001D CDr00r00               120 	call	___sdcc_bcall_ehl
+      000020 E8 04                  121 	add	sp, #4
+                                    122 ;src/main.c:44: text_print_string_bkg(0, 6, "Hold any button");
+      000022 11rC8r00               123 	ld	de, #___str_1
+      000025 D5                     124 	push	de
+      000026 21 00 06               125 	ld	hl, #0x600
+      000029 E5                     126 	push	hl
+      00002A 1Er00                  127 	ld	e, #b_text_print_string_bkg
+      00002C 21r00r00               128 	ld	hl, #_text_print_string_bkg
+      00002F CDr00r00               129 	call	___sdcc_bcall_ehl
+      000032 E8 04                  130 	add	sp, #4
+                                    131 ;src/main.c:45: text_print_string_bkg(0, 7, "to exit.");
+      000034 11rD8r00               132 	ld	de, #___str_2
+      000037 D5                     133 	push	de
+      000038 21 00 07               134 	ld	hl, #0x700
+      00003B E5                     135 	push	hl
+      00003C 1Er00                  136 	ld	e, #b_text_print_string_bkg
+      00003E 21r00r00               137 	ld	hl, #_text_print_string_bkg
+      000041 CDr00r00               138 	call	___sdcc_bcall_ehl
+      000044 E8 04                  139 	add	sp, #4
+                                    140 ;src/main.c:46: NR52_REG = 0x80;
+      000046 3E 80                  141 	ld	a, #0x80
+      000048 E0r00                  142 	ldh	(_NR52_REG + 0), a
+                                    143 ;src/main.c:47: NR50_REG = 0x77; 
+      00004A 3E 77                  144 	ld	a, #0x77
+      00004C E0r00                  145 	ldh	(_NR50_REG + 0), a
+                                    146 ;src/main.c:48: NR51_REG = 0xFF;
+      00004E 3E FF                  147 	ld	a, #0xff
+      000050 E0r00                  148 	ldh	(_NR51_REG + 0), a
+                                    149 ;src/main.c:49: while (1) {
+      000052                        150 00111$:
+                                    151 ;src/main.c:50: if ((joypad() & J_START) || (joypad() & J_SELECT) || (joypad() & J_A) || (joypad() & J_B) || (joypad() & J_UP) || (joypad() & J_DOWN) || (joypad() & J_LEFT) || (joypad() & J_RIGHT)) {
+      000052 CDr00r00               152 	call	_joypad
+      000055 7B                     153 	ld	a, e
+      000056 07                     154 	rlca
+      000057 38 4E                  155 	jr	C, 00112$
+      000059 CDr00r00               156 	call	_joypad
+      00005C CB 73                  157 	bit	6, e
+      00005E 20 47                  158 	jr	NZ, 00112$
+      000060 CDr00r00               159 	call	_joypad
+      000063 CB 63                  160 	bit	4, e
+      000065 20 40                  161 	jr	NZ, 00112$
+      000067 CDr00r00               162 	call	_joypad
+      00006A CB 6B                  163 	bit	5, e
+      00006C 20 39                  164 	jr	NZ, 00112$
+      00006E CDr00r00               165 	call	_joypad
+      000071 CB 53                  166 	bit	2, e
+      000073 20 32                  167 	jr	NZ, 00112$
+      000075 CDr00r00               168 	call	_joypad
+      000078 CB 5B                  169 	bit	3, e
+      00007A 20 2B                  170 	jr	NZ, 00112$
+      00007C CDr00r00               171 	call	_joypad
+      00007F CB 4B                  172 	bit	1, e
+      000081 20 24                  173 	jr	NZ, 00112$
+      000083 CDr00r00               174 	call	_joypad
+      000086 7B                     175 	ld	a, e
+      000087 0F                     176 	rrca
+      000088 38 1D                  177 	jr	C, 00112$
+                                    178 ;src/main.c:53: NR10_REG = 0x16;
+      00008A 3E 16                  179 	ld	a, #0x16
+      00008C E0r00                  180 	ldh	(_NR10_REG + 0), a
+                                    181 ;src/main.c:54: NR11_REG = 0x40;
+      00008E 3E 40                  182 	ld	a, #0x40
+      000090 E0r00                  183 	ldh	(_NR11_REG + 0), a
+                                    184 ;src/main.c:55: NR12_REG = 0x58;
+      000092 3E 58                  185 	ld	a, #0x58
+      000094 E0r00                  186 	ldh	(_NR12_REG + 0), a
+                                    187 ;src/main.c:56: NR13_REG = 0x00;
+      000096 AF                     188 	xor	a, a
+      000097 E0r00                  189 	ldh	(_NR13_REG + 0), a
+                                    190 ;src/main.c:57: NR14_REG = 0xC3;
+      000099 3E C3                  191 	ld	a, #0xc3
+      00009B E0r00                  192 	ldh	(_NR14_REG + 0), a
+                                    193 ;src/main.c:58: delay(500);
+      00009D 11 F4 01               194 	ld	de, #0x01f4
+      0000A0 D5                     195 	push	de
+      0000A1 CDr00r00               196 	call	_delay
+      0000A4 E1                     197 	pop	hl
+      0000A5 18 AB                  198 	jr	00111$
+      0000A7                        199 00112$:
+                                    200 ;src/main.c:60: blank_display();
+      0000A7 1Er00                  201 	ld	e, #b_blank_display
+      0000A9 21r00r00               202 	ld	hl, #_blank_display
+      0000AC CDr00r00               203 	call	___sdcc_bcall_ehl
+                                    204 ;src/main.c:61: return ask_user_pass_or_fail();
+      0000AF 1Er00                  205 	ld	e, #b_ask_user_pass_or_fail
+      0000B1 21r00r00               206 	ld	hl, #_ask_user_pass_or_fail
+                                    207 ;src/main.c:62: }
+      0000B4 C3r00r00               208 	jp  ___sdcc_bcall_ehl
+      0000B7                        209 ___str_0:
+      0000B7 50 6C 61 79 69 6E 67   210 	.ascii "Playing sound..."
+             20 73 6F 75 6E 64 2E
+             2E 2E
+      0000C7 00                     211 	.db 0x00
+      0000C8                        212 ___str_1:
+      0000C8 48 6F 6C 64 20 61 6E   213 	.ascii "Hold any button"
+             79 20 62 75 74 74 6F
+             6E
+      0000D7 00                     214 	.db 0x00
+      0000D8                        215 ___str_2:
+      0000D8 74 6F 20 65 78 69 74   216 	.ascii "to exit."
+             2E
+      0000E0 00                     217 	.db 0x00
+                                    218 ;src/main.c:64: void start_test(uint8_t testIdx)
+                                    219 ;	---------------------------------
+                                    220 ; Function start_test
+                                    221 ; ---------------------------------
+      0000E1                        222 _start_test::
+                                    223 ;src/main.c:66: PRINT_FUNC_INFO;
+      0000E1 F0r00                  224 	ldh	a, (__current_bank + 0)
+      0000E3 4F                     225 	ld	c, a
+      0000E4 06 00                  226 	ld	b, #0x00
+      0000E6 C5                     227 	push	bc
+      0000E7 11rDCr01               228 	ld	de, #___str_5
+      0000EA D5                     229 	push	de
+      0000EB 11 42 00               230 	ld	de, #0x0042
+      0000EE D5                     231 	push	de
+      0000EF 11rD1r01               232 	ld	de, #___str_4
+      0000F2 D5                     233 	push	de
+      0000F3 11rB5r01               234 	ld	de, #___str_3
+      0000F6 D5                     235 	push	de
+      0000F7 CDr00r00               236 	call	_EMU_printf
+      0000FA E8 0A                  237 	add	sp, #10
+                                    238 ;src/main.c:67: uint8_t testResult = 0;
+      0000FC 1E 00                  239 	ld	e, #0x00
+                                    240 ;src/main.c:68: if (testIdx == 0) {
+      0000FE F8 02                  241 	ldhl	sp,	#2
+      000100 7E                     242 	ld	a, (hl)
+      000101 B7                     243 	or	a, a
+      000102 20 14                  244 	jr	NZ, 00116$
+                                    245 ;src/main.c:70: blank_display();
+      000104 D5                     246 	push	de
+      000105 1Er00                  247 	ld	e, #b_blank_display
+      000107 21r00r00               248 	ld	hl, #_blank_display
+      00010A CDr00r00               249 	call	___sdcc_bcall_ehl
+      00010D 1Er00                  250 	ld	e, #b_button_test
+      00010F 21r00r00               251 	ld	hl, #_button_test
+      000112 CDr00r00               252 	call	___sdcc_bcall_ehl
+      000115 D1                     253 	pop	de
+      000116 18 72                  254 	jr	00117$
+      000118                        255 00116$:
+                                    256 ;src/main.c:72: } else if (testIdx == 1) {
+      000118 F8 02                  257 	ldhl	sp,	#2
+      00011A 7E                     258 	ld	a, (hl)
+      00011B 3D                     259 	dec	a
+      00011C 20 12                  260 	jr	NZ, 00113$
+                                    261 ;src/main.c:74: display_test();
+      00011E 1Er00                  262 	ld	e, #b_display_test
+      000120 21r00r00               263 	ld	hl, #_display_test
+      000123 CDr00r00               264 	call	___sdcc_bcall_ehl
+                                    265 ;src/main.c:75: testResult = ask_user_pass_or_fail();
+      000126 1Er00                  266 	ld	e, #b_ask_user_pass_or_fail
+      000128 21r00r00               267 	ld	hl, #_ask_user_pass_or_fail
+      00012B CDr00r00               268 	call	___sdcc_bcall_ehl
+      00012E 18 5A                  269 	jr	00117$
+      000130                        270 00113$:
+                                    271 ;src/main.c:76: } else if (testIdx == 2) {
+      000130 F8 02                  272 	ldhl	sp,	#2
+      000132 7E                     273 	ld	a, (hl)
+      000133 D6 02                  274 	sub	a, #0x02
+      000135 20 1A                  275 	jr	NZ, 00110$
+                                    276 ;src/main.c:78: blank_display();
+      000137 1Er00                  277 	ld	e, #b_blank_display
+      000139 21r00r00               278 	ld	hl, #_blank_display
+      00013C CDr00r00               279 	call	___sdcc_bcall_ehl
+                                    280 ;src/main.c:79: text_load_font();
+      00013F 1Er00                  281 	ld	e, #b_text_load_font
+      000141 21r00r00               282 	ld	hl, #_text_load_font
+      000144 CDr00r00               283 	call	___sdcc_bcall_ehl
+                                    284 ;src/main.c:80: testResult = mem_test();
+      000147 1Er00                  285 	ld	e, #b_mem_test
+      000149 21r00r00               286 	ld	hl, #_mem_test
+      00014C CDr00r00               287 	call	___sdcc_bcall_ehl
+      00014F 18 39                  288 	jr	00117$
+      000151                        289 00110$:
+                                    290 ;src/main.c:81: } else if (testIdx == 3) {
+      000151 F8 02                  291 	ldhl	sp,	#2
+      000153 7E                     292 	ld	a, (hl)
+      000154 D6 03                  293 	sub	a, #0x03
+      000156 20 05                  294 	jr	NZ, 00107$
+                                    295 ;src/main.c:83: testResult = audio_test();
+      000158 CDr00r00               296 	call	_audio_test
+      00015B 18 2D                  297 	jr	00117$
+      00015D                        298 00107$:
+                                    299 ;src/main.c:84: } else if (testIdx == 4) {
+      00015D F8 02                  300 	ldhl	sp,	#2
+      00015F 7E                     301 	ld	a, (hl)
+      000160 D6 04                  302 	sub	a, #0x04
+      000162 20 1A                  303 	jr	NZ, 00104$
+                                    304 ;src/main.c:86: blank_display();
+      000164 1Er00                  305 	ld	e, #b_blank_display
+      000166 21r00r00               306 	ld	hl, #_blank_display
+      000169 CDr00r00               307 	call	___sdcc_bcall_ehl
+                                    308 ;src/main.c:87: text_load_font();
+      00016C 1Er00                  309 	ld	e, #b_text_load_font
+      00016E 21r00r00               310 	ld	hl, #_text_load_font
+      000171 CDr00r00               311 	call	___sdcc_bcall_ehl
+                                    312 ;src/main.c:88: testResult = gblink_test();
+      000174 1Er00                  313 	ld	e, #b_gblink_test
+      000176 21r00r00               314 	ld	hl, #_gblink_test
+      000179 CDr00r00               315 	call	___sdcc_bcall_ehl
+      00017C 18 0C                  316 	jr	00117$
+      00017E                        317 00104$:
+                                    318 ;src/main.c:89: } else if (testIdx == 5) {
+      00017E F8 02                  319 	ldhl	sp,	#2
+      000180 7E                     320 	ld	a, (hl)
+      000181 D6 05                  321 	sub	a, #0x05
+      000183 20 05                  322 	jr	NZ, 00117$
+                                    323 ;src/main.c:91: reset();
+      000185 D5                     324 	push	de
+      000186 CDr00r00               325 	call	_reset
+      000189 D1                     326 	pop	de
+      00018A                        327 00117$:
+                                    328 ;src/main.c:93: EMU_printf("test result => %i", testResult);
+      00018A 16 00                  329 	ld	d, #0x00
+      00018C D5                     330 	push	de
+      00018D D5                     331 	push	de
+      00018E 01rE7r01               332 	ld	bc, #___str_6
+      000191 C5                     333 	push	bc
+      000192 CDr00r00               334 	call	_EMU_printf
+      000195 E8 04                  335 	add	sp, #4
+      000197 D1                     336 	pop	de
+                                    337 ;src/main.c:94: save_test_result(testIdx + 1, testResult);
+      000198 F8 02                  338 	ldhl	sp,	#2
+      00019A 4E                     339 	ld	c, (hl)
+      00019B 06 00                  340 	ld	b, #0x00
+      00019D 03                     341 	inc	bc
+      00019E D5                     342 	push	de
+      00019F C5                     343 	push	bc
+      0001A0 CDr00r00               344 	call	_save_test_result
+      0001A3 E8 04                  345 	add	sp, #4
+                                    346 ;src/main.c:95: menu_background_display();
+      0001A5 1Er00                  347 	ld	e, #b_menu_background_display
+      0001A7 21r00r00               348 	ld	hl, #_menu_background_display
+      0001AA CDr00r00               349 	call	___sdcc_bcall_ehl
+                                    350 ;src/main.c:96: menu_arrow_display();
+      0001AD 1Er00                  351 	ld	e, #b_menu_arrow_display
+      0001AF 21r00r00               352 	ld	hl, #_menu_arrow_display
+                                    353 ;src/main.c:97: }
+      0001B2 C3r00r00               354 	jp  ___sdcc_bcall_ehl
+      0001B5                        355 ___str_3:
+      0001B5 5B 44 42 47 5D 20 25   356 	.ascii "[DBG] %s:%d @ %s() bank: %d"
+             73 3A 25 64 20 40 20
+             25 73 28 29 20 62 61
+             6E 6B 3A 20 25 64
+      0001D0 00                     357 	.db 0x00
+      0001D1                        358 ___str_4:
+      0001D1 73 72 63 2F 6D 61 69   359 	.ascii "src/main.c"
+             6E 2E 63
+      0001DB 00                     360 	.db 0x00
+      0001DC                        361 ___str_5:
+      0001DC 73 74 61 72 74 5F 74   362 	.ascii "start_test"
+             65 73 74
+      0001E6 00                     363 	.db 0x00
+      0001E7                        364 ___str_6:
+      0001E7 74 65 73 74 20 72 65   365 	.ascii "test result => %i"
+             73 75 6C 74 20 3D 3E
+             20 25 69
+      0001F8 00                     366 	.db 0x00
+                                    367 ;src/main.c:99: void double_rumble() {
+                                    368 ;	---------------------------------
+                                    369 ; Function double_rumble
+                                    370 ; ---------------------------------
+      0001F9                        371 _double_rumble::
+                                    372 ;src/main.c:100: RUMBLE_ON;
+      0001F9 FA 00 40               373 	ld	a, (#0x4000)
+      0001FC CB DF                  374 	set	3, a
+      0001FE EA 00 40               375 	ld	(#0x4000),a
+                                    376 ;src/main.c:101: delay(200);
+      000201 11 C8 00               377 	ld	de, #0x00c8
+      000204 D5                     378 	push	de
+      000205 CDr00r00               379 	call	_delay
+      000208 E1                     380 	pop	hl
+                                    381 ;src/main.c:102: RUMBLE_OFF;
+      000209 FA 00 40               382 	ld	a, (#0x4000)
+      00020C CB 9F                  383 	res	3, a
+      00020E EA 00 40               384 	ld	(#0x4000),a
+                                    385 ;src/main.c:103: delay(200);
+      000211 11 C8 00               386 	ld	de, #0x00c8
+      000214 D5                     387 	push	de
+      000215 CDr00r00               388 	call	_delay
+      000218 E1                     389 	pop	hl
+                                    390 ;src/main.c:104: RUMBLE_ON;
+      000219 FA 00 40               391 	ld	a, (#0x4000)
+      00021C CB DF                  392 	set	3, a
+      00021E EA 00 40               393 	ld	(#0x4000),a
+                                    394 ;src/main.c:105: delay(200);
+      000221 11 C8 00               395 	ld	de, #0x00c8
+      000224 D5                     396 	push	de
+      000225 CDr00r00               397 	call	_delay
+      000228 E1                     398 	pop	hl
+                                    399 ;src/main.c:106: RUMBLE_OFF;
+      000229 FA 00 40               400 	ld	a, (#0x4000)
+      00022C CB 9F                  401 	res	3, a
+      00022E EA 00 40               402 	ld	(#0x4000),a
+                                    403 ;src/main.c:107: }
+      000231 C9                     404 	ret
+                                    405 ;src/main.c:109: void main() 
+                                    406 ;	---------------------------------
+                                    407 ; Function main
+                                    408 ; ---------------------------------
+      000232                        409 _main::
+      000232 E8 FC                  410 	add	sp, #-4
+                                    411 ;src/main.c:111: ENABLE_RAM;
+      000234 21 00 00               412 	ld	hl, #0x0000
+      000237 36 0A                  413 	ld	(hl), #0x0a
+                                    414 ;src/main.c:112: RUMBLE_ON;
+      000239 26 40                  415 	ld	h, #0x40
+      00023B 7E                     416 	ld	a, (hl)
+      00023C CB DF                  417 	set	3, a
+      00023E EA 00 40               418 	ld	(#0x4000),a
+                                    419 ;src/main.c:114: uint8_t menu_y = MENU_ARROW_START_Y;
+      000241 FAr03r00               420 	ld	a, (#_MENU_ARROW_START_Y)
+      000244 F8 00                  421 	ldhl	sp,	#0
+      000246 77                     422 	ld	(hl), a
+                                    423 ;src/main.c:115: rng_seed = DIV_REG;
+      000247 F0r00                  424 	ldh	a, (_DIV_REG + 0)
+      000249 21r00r00               425 	ld	hl, #_rng_seed
+      00024C 22                     426 	ld	(hl+), a
+      00024D 36 00                  427 	ld	(hl), #0x00
+                                    428 ;src/main.c:117: EMU_printf("START (bank=%d)\n", (int)CURRENT_BANK);
+      00024F F0r00                  429 	ldh	a, (__current_bank + 0)
+      000251 4F                     430 	ld	c, a
+      000252 06 00                  431 	ld	b, #0x00
+      000254 C5                     432 	push	bc
+      000255 11rD1r03               433 	ld	de, #___str_7
+      000258 D5                     434 	push	de
+      000259 CDr00r00               435 	call	_EMU_printf
+      00025C E8 04                  436 	add	sp, #4
+                                    437 ;X:/gbc_hacks/gbdk/include/gb/gb.h:655: __asm__("ei");
+      00025E FB                     438 	ei
+                                    439 ;src/main.c:119: set_interrupts(VBL_IFLAG | SIO_IFLAG);
+      00025F 3E 09                  440 	ld	a, #0x09
+      000261 F5                     441 	push	af
+      000262 33                     442 	inc	sp
+      000263 CDr00r00               443 	call	_set_interrupts
+      000266 33                     444 	inc	sp
+                                    445 ;src/main.c:120: if (superuser_hold() == 1) {
+      000267 1Er00                  446 	ld	e, #b_superuser_hold
+      000269 21r00r00               447 	ld	hl, #_superuser_hold
+      00026C CDr00r00               448 	call	___sdcc_bcall_ehl
+      00026F 7B                     449 	ld	a, e
+      000270 3D                     450 	dec	a
+      000271 B2                     451 	or	a, d
+      000272 20 23                  452 	jr	NZ, 00102$
+                                    453 ;src/main.c:121: RUMBLE_OFF;
+      000274 FA 00 40               454 	ld	a, (#0x4000)
+      000277 CB 9F                  455 	res	3, a
+      000279 EA 00 40               456 	ld	(#0x4000),a
+                                    457 ;src/main.c:122: blank_display();
+      00027C 1Er00                  458 	ld	e, #b_blank_display
+      00027E 21r00r00               459 	ld	hl, #_blank_display
+      000281 CDr00r00               460 	call	___sdcc_bcall_ehl
+                                    461 ;src/main.c:123: text_load_font();
+      000284 1Er00                  462 	ld	e, #b_text_load_font
+      000286 21r00r00               463 	ld	hl, #_text_load_font
+      000289 CDr00r00               464 	call	___sdcc_bcall_ehl
+                                    465 ;src/main.c:124: superuser_enter_hostmode();
+      00028C 1Er00                  466 	ld	e, #b_superuser_enter_hostmode
+      00028E 21r00r00               467 	ld	hl, #_superuser_enter_hostmode
+      000291 CDr00r00               468 	call	___sdcc_bcall_ehl
+                                    469 ;src/main.c:125: return;
+      000294 C3rCEr03               470 	jp	00126$
+      000297                        471 00102$:
+                                    472 ;src/main.c:127: check_savemem();
+      000297 CDr00r00               473 	call	_check_savemem
+                                    474 ;src/main.c:128: HIDE_BKG;
+      00029A F0r00                  475 	ldh	a, (_LCDC_REG + 0)
+      00029C E6 FE                  476 	and	a, #0xfe
+      00029E E0r00                  477 	ldh	(_LCDC_REG + 0), a
+                                    478 ;src/main.c:129: menu_background_display();
+      0002A0 1Er00                  479 	ld	e, #b_menu_background_display
+      0002A2 21r00r00               480 	ld	hl, #_menu_background_display
+      0002A5 CDr00r00               481 	call	___sdcc_bcall_ehl
+                                    482 ;src/main.c:130: menu_arrow_display();
+      0002A8 1Er00                  483 	ld	e, #b_menu_arrow_display
+      0002AA 21r00r00               484 	ld	hl, #_menu_arrow_display
+      0002AD CDr00r00               485 	call	___sdcc_bcall_ehl
+                                    486 ;src/main.c:131: SHOW_BKG;
+      0002B0 F0r00                  487 	ldh	a, (_LCDC_REG + 0)
+      0002B2 F6 01                  488 	or	a, #0x01
+      0002B4 E0r00                  489 	ldh	(_LCDC_REG + 0), a
+                                    490 ;src/main.c:133: rng_seed |= (uint16_t)DIV_REG << 8;
+      0002B6 F0r00                  491 	ldh	a, (_DIV_REG + 0)
+      0002B8 4F                     492 	ld	c, a
+      0002B9 AF                     493 	xor	a, a
+      0002BA 21r00r00               494 	ld	hl, #_rng_seed
+      0002BD B6                     495 	or	a, (hl)
+      0002BE 22                     496 	ld	(hl+), a
+      0002BF 79                     497 	ld	a, c
+      0002C0 B6                     498 	or	a, (hl)
+                                    499 ;src/main.c:134: initarand(rng_seed);
+      0002C1 32                     500 	ld	(hl-), a
+      0002C2 2A                     501 	ld	a, (hl+)
+      0002C3 5F                     502 	ld	e, a
+      0002C4 56                     503 	ld	d, (hl)
+      0002C5 D5                     504 	push	de
+      0002C6 CDr00r00               505 	call	_initarand
+      0002C9 E1                     506 	pop	hl
+                                    507 ;src/main.c:135: RUMBLE_OFF;
+      0002CA FA 00 40               508 	ld	a, (#0x4000)
+      0002CD CB 9F                  509 	res	3, a
+      0002CF EA 00 40               510 	ld	(#0x4000),a
+                                    511 ;src/main.c:137: int didRumble = 0;
+      0002D2 01 00 00               512 	ld	bc, #0x0000
+                                    513 ;src/main.c:139: while (1) {
+      0002D5 AF                     514 	xor	a, a
+      0002D6 F8 02                  515 	ldhl	sp,	#2
+      0002D8 22                     516 	ld	(hl+), a
+      0002D9 77                     517 	ld	(hl), a
+      0002DA                        518 00122$:
+                                    519 ;src/main.c:140: if (didRumble == 1) {
+      0002DA 79                     520 	ld	a, c
+      0002DB 3D                     521 	dec	a
+      0002DC B0                     522 	or	a, b
+      0002DD 20 32                  523 	jr	NZ, 00107$
+                                    524 ;src/main.c:141: if (rumbleDelay > 2) {
+      0002DF F8 02                  525 	ldhl	sp,	#2
+      0002E1 3E 02                  526 	ld	a, #0x02
+      0002E3 96                     527 	sub	a, (hl)
+      0002E4 23                     528 	inc	hl
+      0002E5 3E 00                  529 	ld	a, #0x00
+      0002E7 9E                     530 	sbc	a, (hl)
+      0002E8 3E 00                  531 	ld	a, #0x00
+      0002EA 57                     532 	ld	d, a
+      0002EB CB 7E                  533 	bit	7, (hl)
+      0002ED 28 07                  534 	jr	Z, 00177$
+      0002EF CB 7A                  535 	bit	7, d
+      0002F1 20 08                  536 	jr	NZ, 00178$
+      0002F3 BF                     537 	cp	a, a
+      0002F4 18 05                  538 	jr	00178$
+      0002F6                        539 00177$:
+      0002F6 CB 7A                  540 	bit	7, d
+      0002F8 28 01                  541 	jr	Z, 00178$
+      0002FA 37                     542 	scf
+      0002FB                        543 00178$:
+      0002FB 30 0D                  544 	jr	NC, 00104$
+                                    545 ;src/main.c:142: RUMBLE_OFF;
+      0002FD FA 00 40               546 	ld	a, (#0x4000)
+      000300 CB 9F                  547 	res	3, a
+      000302 EA 00 40               548 	ld	(#0x4000),a
+                                    549 ;src/main.c:143: didRumble = 0;
+      000305 01 00 00               550 	ld	bc, #0x0000
+      000308 18 07                  551 	jr	00107$
+      00030A                        552 00104$:
+                                    553 ;src/main.c:145: rumbleDelay += 1;
+      00030A F8 02                  554 	ldhl	sp,	#2
+      00030C 34                     555 	inc	(hl)
+      00030D 20 02                  556 	jr	NZ, 00179$
+      00030F 23                     557 	inc	hl
+      000310 34                     558 	inc	(hl)
+      000311                        559 00179$:
+      000311                        560 00107$:
+                                    561 ;src/main.c:148: if (joypad() & J_UP) {
+      000311 CDr00r00               562 	call	_joypad
+                                    563 ;src/main.c:154: menu_y -= 12;
+      000314 F8 00                  564 	ldhl	sp,	#0
+      000316 2A                     565 	ld	a, (hl+)
+      000317 77                     566 	ld	(hl), a
+                                    567 ;src/main.c:148: if (joypad() & J_UP) {
+      000318 CB 53                  568 	bit	2, e
+      00031A 28 1E                  569 	jr	Z, 00119$
+                                    570 ;src/main.c:149: waitpadup();
+      00031C CDr00r00               571 	call	_waitpadup
+                                    572 ;src/main.c:150: RUMBLE_ON;
+      00031F FA 00 40               573 	ld	a, (#0x4000)
+      000322 CB DF                  574 	set	3, a
+      000324 EA 00 40               575 	ld	(#0x4000),a
+                                    576 ;src/main.c:151: didRumble = 1;
+      000327 01 01 00               577 	ld	bc, #0x0001
+                                    578 ;src/main.c:152: if (CURRENT_INDEX > 0) {
+      00032A 21r0Br00               579 	ld	hl, #_CURRENT_INDEX
+      00032D 7E                     580 	ld	a, (hl)
+      00032E B7                     581 	or	a, a
+      00032F 28 75                  582 	jr	Z, 00120$
+                                    583 ;src/main.c:153: CURRENT_INDEX--;
+      000331 35                     584 	dec	(hl)
+                                    585 ;src/main.c:154: menu_y -= 12;
+      000332 F8 01                  586 	ldhl	sp,	#1
+      000334 3A                     587 	ld	a, (hl-)
+      000335 C6 F4                  588 	add	a, #0xf4
+      000337 77                     589 	ld	(hl), a
+      000338 18 6C                  590 	jr	00120$
+      00033A                        591 00119$:
+                                    592 ;src/main.c:156: } else if (joypad() & J_DOWN) {
+      00033A CDr00r00               593 	call	_joypad
+      00033D CB 5B                  594 	bit	3, e
+      00033F 28 23                  595 	jr	Z, 00116$
+                                    596 ;src/main.c:157: waitpadup();
+      000341 CDr00r00               597 	call	_waitpadup
+                                    598 ;src/main.c:158: RUMBLE_ON;
+      000344 FA 00 40               599 	ld	a, (#0x4000)
+      000347 CB DF                  600 	set	3, a
+      000349 EA 00 40               601 	ld	(#0x4000),a
+                                    602 ;src/main.c:159: didRumble = 1;
+      00034C 01 01 00               603 	ld	bc, #0x0001
+                                    604 ;src/main.c:160: if (CURRENT_INDEX < MENU_INDEX_MAX) {
+      00034F FAr0Br00               605 	ld	a, (#_CURRENT_INDEX)
+      000352 21r0Ar00               606 	ld	hl, #_MENU_INDEX_MAX
+      000355 96                     607 	sub	a, (hl)
+      000356 30 4E                  608 	jr	NC, 00120$
+                                    609 ;src/main.c:161: CURRENT_INDEX++;
+      000358 21r0Br00               610 	ld	hl, #_CURRENT_INDEX
+      00035B 34                     611 	inc	(hl)
+                                    612 ;src/main.c:162: menu_y += 12;
+      00035C F8 01                  613 	ldhl	sp,	#1
+      00035E 3A                     614 	ld	a, (hl-)
+      00035F C6 0C                  615 	add	a, #0x0c
+      000361 77                     616 	ld	(hl), a
+      000362 18 42                  617 	jr	00120$
+      000364                        618 00116$:
+                                    619 ;src/main.c:164: } else if (joypad() & J_A || joypad() & J_RIGHT) {
+      000364 CDr00r00               620 	call	_joypad
+      000367 CB 63                  621 	bit	4, e
+      000369 20 07                  622 	jr	NZ, 00112$
+      00036B CDr00r00               623 	call	_joypad
+      00036E 7B                     624 	ld	a, e
+      00036F 0F                     625 	rrca
+      000370 30 34                  626 	jr	NC, 00120$
+      000372                        627 00112$:
+                                    628 ;src/main.c:165: EMU_printf("executing test idx => 0x%x\n", CURRENT_INDEX);
+      000372 21r0Br00               629 	ld	hl, #_CURRENT_INDEX
+      000375 5E                     630 	ld	e, (hl)
+      000376 16 00                  631 	ld	d, #0x00
+      000378 C5                     632 	push	bc
+      000379 D5                     633 	push	de
+      00037A 11rE2r03               634 	ld	de, #___str_8
+      00037D D5                     635 	push	de
+      00037E CDr00r00               636 	call	_EMU_printf
+      000381 E8 04                  637 	add	sp, #4
+      000383 C1                     638 	pop	bc
+                                    639 ;src/main.c:166: waitpadup();
+      000384 CDr00r00               640 	call	_waitpadup
+                                    641 ;src/main.c:167: double_rumble();
+      000387 C5                     642 	push	bc
+      000388 CDrF9r01               643 	call	_double_rumble
+      00038B FAr0Br00               644 	ld	a, (#_CURRENT_INDEX)
+      00038E F5                     645 	push	af
+      00038F 33                     646 	inc	sp
+      000390 CDrE1r00               647 	call	_start_test
+      000393 33                     648 	inc	sp
+      000394 C1                     649 	pop	bc
+                                    650 ;src/main.c:169: EMU_printf("returned from start_test (bank=%d)\n", (int)CURRENT_BANK);
+      000395 F0r00                  651 	ldh	a, (__current_bank + 0)
+      000397 5F                     652 	ld	e, a
+      000398 16 00                  653 	ld	d, #0x00
+      00039A C5                     654 	push	bc
+      00039B D5                     655 	push	de
+      00039C 11rFEr03               656 	ld	de, #___str_9
+      00039F D5                     657 	push	de
+      0003A0 CDr00r00               658 	call	_EMU_printf
+      0003A3 E8 04                  659 	add	sp, #4
+      0003A5 C1                     660 	pop	bc
+      0003A6                        661 00120$:
+                                    662 ;src/main.c:171: move_sprite(0, MENU_ARROW_X_FOR_INDEX[CURRENT_INDEX], menu_y);
+      0003A6 3Er04                  663 	ld	a, #<(_MENU_ARROW_X_FOR_INDEX)
+      0003A8 21r0Br00               664 	ld	hl, #_CURRENT_INDEX
+      0003AB 86                     665 	add	a, (hl)
+      0003AC 5F                     666 	ld	e, a
+      0003AD 3Es00                  667 	ld	a, #>(_MENU_ARROW_X_FOR_INDEX)
+      0003AF CE 00                  668 	adc	a, #0x00
+      0003B1 57                     669 	ld	d, a
+      0003B2 1A                     670 	ld	a, (de)
+      0003B3 F8 01                  671 	ldhl	sp,	#1
+                                    672 ;X:/gbc_hacks/gbdk/include/gb/gb.h:1520: OAM_item_t * itm = &shadow_OAM[nb];
+                                    673 ;X:/gbc_hacks/gbdk/include/gb/gb.h:1521: itm->y=y, itm->x=x;
+      0003B5 32                     674 	ld	(hl-), a
+      0003B6 11r00r00               675 	ld	de, #_shadow_OAM
+      0003B9 2A                     676 	ld	a, (hl+)
+      0003BA 12                     677 	ld	(de), a
+      0003BB 13                     678 	inc	de
+      0003BC 7E                     679 	ld	a, (hl)
+      0003BD 12                     680 	ld	(de), a
+                                    681 ;src/main.c:172: wait_vbl_done();
+      0003BE CDr00r00               682 	call	_wait_vbl_done
+                                    683 ;src/main.c:173: delay(100);
+      0003C1 C5                     684 	push	bc
+      0003C2 11 64 00               685 	ld	de, #0x0064
+      0003C5 D5                     686 	push	de
+      0003C6 CDr00r00               687 	call	_delay
+      0003C9 E1                     688 	pop	hl
+      0003CA C1                     689 	pop	bc
+      0003CB C3rDAr02               690 	jp	00122$
+      0003CE                        691 00126$:
+                                    692 ;src/main.c:175: }
+      0003CE E8 04                  693 	add	sp, #4
+      0003D0 C9                     694 	ret
+      0003D1                        695 ___str_7:
+      0003D1 53 54 41 52 54 20 28   696 	.ascii "START (bank=%d)"
+             62 61 6E 6B 3D 25 64
+             29
+      0003E0 0A                     697 	.db 0x0a
+      0003E1 00                     698 	.db 0x00
+      0003E2                        699 ___str_8:
+      0003E2 65 78 65 63 75 74 69   700 	.ascii "executing test idx => 0x%x"
+             6E 67 20 74 65 73 74
+             20 69 64 78 20 3D 3E
+             20 30 78 25 78
+      0003FC 0A                     701 	.db 0x0a
+      0003FD 00                     702 	.db 0x00
+      0003FE                        703 ___str_9:
+      0003FE 72 65 74 75 72 6E 65   704 	.ascii "returned from start_test (bank=%d)"
+             64 20 66 72 6F 6D 20
+             73 74 61 72 74 5F 74
+             65 73 74 20 28 62 61
+             6E 6B 3D 25 64 29
+      000420 0A                     705 	.db 0x0a
+      000421 00                     706 	.db 0x00
+                                    707 	.area _CODE_1
+                                    708 	.area _INITIALIZER
+      000000                        709 __xinit____EMU_PROFILER_INIT:
+      000000r00r00                  710 	.dw _EMU_profiler_message
+      000002                        711 __xinit__MENU_ARROW_START_X:
+      000002 44                     712 	.db #0x44	; 68	'D'
+      000003                        713 __xinit__MENU_ARROW_START_Y:
+      000003 36                     714 	.db #0x36	; 54	'6'
+      000004                        715 __xinit__MENU_ARROW_X_FOR_INDEX:
+      000004 44                     716 	.db #0x44	; 68	'D'
+      000005 34                     717 	.db #0x34	; 52	'4'
+      000006 36                     718 	.db #0x36	; 54	'6'
+      000007 36                     719 	.db #0x36	; 54	'6'
+      000008 38                     720 	.db #0x38	; 56	'8'
+      000009 3C                     721 	.db #0x3c	; 60
+      00000A                        722 __xinit__MENU_INDEX_MAX:
+      00000A 05                     723 	.db #0x05	; 5
+      00000B                        724 __xinit__CURRENT_INDEX:
+      00000B 00                     725 	.db #0x00	; 0
+                                    726 	.area _CABS (ABS)

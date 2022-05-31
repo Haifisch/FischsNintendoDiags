@@ -1,0 +1,95 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000000 L
+    _ColorbarsLeftToRight                                          ****** GX
+    _ColorbarsRightToLeft                                          ****** GX
+    _EMU_printf                                                    ****** GX
+    _EMU_profiler_message                                          ****** GX
+    _LCDC_REG                                                      ****** GX
+    _SCX_REG                                                       ****** GX
+    _SCY_REG                                                       ****** GX
+    _VBK_REG                                                       ****** GX
+  2 ___EMU_PROFILER_INIT                                           000000 R
+  0 ___str_0                                                       0000BD R
+  0 ___str_1                                                       0000D2 R
+  0 ___str_10                                                      00038E R
+  0 ___str_11                                                      0003AC R
+  0 ___str_12                                                      0004A1 R
+  0 ___str_13                                                      0004B6 R
+  0 ___str_14                                                      0004D4 R
+  0 ___str_15                                                      000518 R
+  0 ___str_16                                                      00052D R
+  0 ___str_17                                                      00054B R
+  0 ___str_18                                                      0005F2 R
+  0 ___str_19                                                      000607 R
+  0 ___str_2                                                       0000F0 R
+  0 ___str_20                                                      000625 R
+  0 ___str_21                                                      000632 R
+  0 ___str_3                                                       000165 R
+  0 ___str_4                                                       00017A R
+  0 ___str_5                                                       000198 R
+  0 ___str_6                                                       000274 R
+  0 ___str_7                                                       000289 R
+  0 ___str_8                                                       0002A7 R
+  0 ___str_9                                                       000379 R
+    __current_bank                                                 ****** GX
+  7 __xinit____EMU_PROFILER_INIT                                   000000 R
+  7 __xinit__bar_a                                                 000042 R
+  7 __xinit__bar_b                                                 0001AA R
+  7 __xinit__bar_p                                                 000002 R
+    _alert_pattern_map                                             ****** GX
+    _alert_pattern_map_attributes                                  ****** GX
+    _alert_pattern_palettes                                        ****** GX
+    _alert_pattern_tiles                                           ****** GX
+  2 _bar_a                                                         000042 GR
+  2 _bar_b                                                         0001AA GR
+    _bar_c                                                         ****** GX
+  2 _bar_p                                                         000002 GR
+    _blank_display                                                 ****** GX
+    _checkerboard_32x32_map                                        ****** GX
+    _checkerboard_32x32_map_attributes                             ****** GX
+    _checkerboard_32x32_palettes                                   ****** GX
+    _checkerboard_32x32_tiles                                      ****** GX
+    _delay                                                         ****** GX
+  0 _display_alert_image_pattern                                   0002BC GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 _display_checkerboard                                          0001B7 GR
+  0 _display_colorbar_left_to_right                                000000 GR
+  0 _display_colorbar_right_to_left                                00010F GR
+  0 _display_scroll_pattern                                        0003C8 GR
+  0 _display_test                                                  000567 GR
+  0 _do_scroll_pattern_animation                                   0004EB GR
+    _scroll_pattern_map                                            ****** GX
+    _scroll_pattern_map_attributes                                 ****** GX
+    _scroll_pattern_palettes                                       ****** GX
+    _scroll_pattern_tiles                                          ****** GX
+    _set_bkg_data                                                  ****** GX
+    _set_bkg_palette                                               ****** GX
+    _set_bkg_tiles                                                 ****** GX
+    _wait_vbl_done                                                 ****** GX
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 3.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size    643   flags    0
+   1 _DATA                                      size      0   flags    0
+   2 _INITIALIZED                               size    312   flags    0
+   3 _DABS                                      size      0   flags    8
+   4 _HOME                                      size      0   flags    0
+   5 _GSINIT                                    size      0   flags    0
+   6 _GSFINAL                                   size      0   flags    0
+   7 _INITIALIZER                               size    312   flags    0
+   8 _CABS                                      size      0   flags    8
+

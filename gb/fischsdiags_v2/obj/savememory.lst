@@ -1,0 +1,1151 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.1.6 #12539 (MINGW32)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module savememory
+                                      6 	.optsdcc -mgbz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _print_counter
+                                     12 	.globl _init_savemem
+                                     13 	.globl _inc_hiram
+                                     14 	.globl _inc_ram
+                                     15 	.globl _inc_end
+                                     16 	.globl _inc
+                                     17 	.globl _text_print_string_bkg
+                                     18 	.globl _memset
+                                     19 	.globl _memcpy
+                                     20 	.globl _sprintf
+                                     21 	.globl _EMU_printf
+                                     22 	.globl _hiramcpy
+                                     23 	.globl _delay
+                                     24 	.globl _inc_hiram_var
+                                     25 	.globl _inc_ram_var
+                                     26 	.globl _memTestCounter
+                                     27 	.globl _endData
+                                     28 	.globl _results
+                                     29 	.globl _firstRunByte
+                                     30 	.globl _hiram_buffer
+                                     31 	.globl _ram_buffer
+                                     32 	.globl _save_test_result
+                                     33 	.globl _check_savemem
+                                     34 	.globl _mem_test
+                                     35 ;--------------------------------------------------------
+                                     36 ; special function registers
+                                     37 ;--------------------------------------------------------
+                                     38 ;--------------------------------------------------------
+                                     39 ; ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _DATA
+                           00D000    42 _ram_buffer	=	0xd000
+                           00FFA0    43 _hiram_buffer	=	0xffa0
+                                     44 ;--------------------------------------------------------
+                                     45 ; ram data
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _INITIALIZED
+      000000                         48 ___EMU_PROFILER_INIT:
+      000000                         49 	.ds 2
+      000002                         50 _firstRunByte::
+      000002                         51 	.ds 2
+      000004                         52 _results::
+      000004                         53 	.ds 2
+      000006                         54 _endData::
+      000006                         55 	.ds 2
+      000008                         56 _memTestCounter::
+      000008                         57 	.ds 2
+      00000A                         58 _inc_ram_var::
+      00000A                         59 	.ds 2
+      00000C                         60 _inc_hiram_var::
+      00000C                         61 	.ds 2
+                                     62 ;--------------------------------------------------------
+                                     63 ; absolute external ram data
+                                     64 ;--------------------------------------------------------
+                                     65 	.area _DABS (ABS)
+                                     66 ;--------------------------------------------------------
+                                     67 ; global & static initialisations
+                                     68 ;--------------------------------------------------------
+                                     69 	.area _HOME
+                                     70 	.area _GSINIT
+                                     71 	.area _GSFINAL
+                                     72 	.area _GSINIT
+                                     73 ;--------------------------------------------------------
+                                     74 ; Home
+                                     75 ;--------------------------------------------------------
+                                     76 	.area _HOME
+                                     77 	.area _HOME
+                                     78 ;--------------------------------------------------------
+                                     79 ; code
+                                     80 ;--------------------------------------------------------
+                                     81 	.area _CODE
+                                     82 ;src/savememory.c:17: void inc() {
+                                     83 ;	---------------------------------
+                                     84 ; Function inc
+                                     85 ; ---------------------------------
+      000000                         86 _inc::
+                                     87 ;src/savememory.c:18: memTestCounter++;
+      000000 21r08r00                88 	ld	hl, #_memTestCounter
+      000003 34                      89 	inc	(hl)
+      000004 C0                      90 	ret	NZ
+      000005 23                      91 	inc	hl
+      000006 34                      92 	inc	(hl)
+                                     93 ;src/savememory.c:19: }
+      000007 C9                      94 	ret
+                                     95 ;src/savememory.c:22: void inc_end() {} 
+                                     96 ;	---------------------------------
+                                     97 ; Function inc_end
+                                     98 ; ---------------------------------
+      000008                         99 _inc_end::
+      000008 C9                     100 	ret
+                                    101 ;src/savememory.c:45: void save_test_result(int testType, int testResult) {
+                                    102 ;	---------------------------------
+                                    103 ; Function save_test_result
+                                    104 ; ---------------------------------
+      000009                        105 _save_test_result::
+                                    106 ;src/savememory.c:46: PRINT_FUNC_INFO;
+      000009 11r42r01               107 	ld	de, #___str_2
+      00000C D5                     108 	push	de
+      00000D 11 2E 00               109 	ld	de, #0x002e
+      000010 D5                     110 	push	de
+      000011 11r31r01               111 	ld	de, #___str_1
+      000014 D5                     112 	push	de
+      000015 11r1Cr01               113 	ld	de, #___str_0
+      000018 D5                     114 	push	de
+      000019 CDr00r00               115 	call	_EMU_printf
+      00001C E8 08                  116 	add	sp, #8
+                                    117 ;src/savememory.c:50: memcpy(results->BUTTON_TEST, "OK", 2);
+      00001E 21r04r00               118 	ld	hl, #_results
+      000021 2A                     119 	ld	a, (hl+)
+      000022 4F                     120 	ld	c, a
+      000023 46                     121 	ld	b, (hl)
+                                    122 ;src/savememory.c:48: if (testType == 1) {
+      000024 F8 02                  123 	ldhl	sp,	#2
+      000026 2A                     124 	ld	a, (hl+)
+      000027 3D                     125 	dec	a
+      000028 B6                     126 	or	a, (hl)
+      000029 20 2A                  127 	jr	NZ, 00128$
+                                    128 ;src/savememory.c:50: memcpy(results->BUTTON_TEST, "OK", 2);
+      00002B 21 07 00               129 	ld	hl, #0x0007
+      00002E 09                     130 	add	hl, bc
+      00002F 4D                     131 	ld	c, l
+      000030 44                     132 	ld	b, h
+                                    133 ;src/savememory.c:49: if (testResult) {
+      000031 F8 05                  134 	ldhl	sp,	#5
+      000033 3A                     135 	ld	a, (hl-)
+      000034 B6                     136 	or	a, (hl)
+      000035 28 0F                  137 	jr	Z, 00102$
+                                    138 ;src/savememory.c:50: memcpy(results->BUTTON_TEST, "OK", 2);
+      000037 11 02 00               139 	ld	de, #0x0002
+      00003A D5                     140 	push	de
+      00003B 11r53r01               141 	ld	de, #___str_3
+      00003E D5                     142 	push	de
+      00003F C5                     143 	push	bc
+      000040 CDr00r00               144 	call	_memcpy
+      000043 E8 06                  145 	add	sp, #6
+      000045 C9                     146 	ret
+      000046                        147 00102$:
+                                    148 ;src/savememory.c:52: memcpy(results->BUTTON_TEST, "NO", 2);
+      000046 11 02 00               149 	ld	de, #0x0002
+      000049 D5                     150 	push	de
+      00004A 11r56r01               151 	ld	de, #___str_4
+      00004D D5                     152 	push	de
+      00004E C5                     153 	push	bc
+      00004F CDr00r00               154 	call	_memcpy
+      000052 E8 06                  155 	add	sp, #6
+      000054 C9                     156 	ret
+      000055                        157 00128$:
+                                    158 ;src/savememory.c:54: } else if (testType == 2) {
+      000055 F8 02                  159 	ldhl	sp,	#2
+      000057 2A                     160 	ld	a, (hl+)
+      000058 D6 02                  161 	sub	a, #0x02
+      00005A B6                     162 	or	a, (hl)
+      00005B 20 2A                  163 	jr	NZ, 00125$
+                                    164 ;src/savememory.c:56: memcpy(results->DISPLAY_TEST, "OK", 2);
+      00005D 21 0C 00               165 	ld	hl, #0x000c
+      000060 09                     166 	add	hl, bc
+      000061 4D                     167 	ld	c, l
+      000062 44                     168 	ld	b, h
+                                    169 ;src/savememory.c:55: if (testResult) {
+      000063 F8 05                  170 	ldhl	sp,	#5
+      000065 3A                     171 	ld	a, (hl-)
+      000066 B6                     172 	or	a, (hl)
+      000067 28 0F                  173 	jr	Z, 00105$
+                                    174 ;src/savememory.c:56: memcpy(results->DISPLAY_TEST, "OK", 2);
+      000069 11 02 00               175 	ld	de, #0x0002
+      00006C D5                     176 	push	de
+      00006D 11r53r01               177 	ld	de, #___str_3
+      000070 D5                     178 	push	de
+      000071 C5                     179 	push	bc
+      000072 CDr00r00               180 	call	_memcpy
+      000075 E8 06                  181 	add	sp, #6
+      000077 C9                     182 	ret
+      000078                        183 00105$:
+                                    184 ;src/savememory.c:58: memcpy(results->DISPLAY_TEST, "NO", 2);
+      000078 11 02 00               185 	ld	de, #0x0002
+      00007B D5                     186 	push	de
+      00007C 11r56r01               187 	ld	de, #___str_4
+      00007F D5                     188 	push	de
+      000080 C5                     189 	push	bc
+      000081 CDr00r00               190 	call	_memcpy
+      000084 E8 06                  191 	add	sp, #6
+      000086 C9                     192 	ret
+      000087                        193 00125$:
+                                    194 ;src/savememory.c:60: } else if (testType == 3) {
+      000087 F8 02                  195 	ldhl	sp,	#2
+      000089 2A                     196 	ld	a, (hl+)
+      00008A D6 03                  197 	sub	a, #0x03
+      00008C B6                     198 	or	a, (hl)
+      00008D 20 2A                  199 	jr	NZ, 00122$
+                                    200 ;src/savememory.c:62: memcpy(results->MEMORY_TEST, "OK", 2);
+      00008F 21 11 00               201 	ld	hl, #0x0011
+      000092 09                     202 	add	hl, bc
+      000093 4D                     203 	ld	c, l
+      000094 44                     204 	ld	b, h
+                                    205 ;src/savememory.c:61: if (testResult) {
+      000095 F8 05                  206 	ldhl	sp,	#5
+      000097 3A                     207 	ld	a, (hl-)
+      000098 B6                     208 	or	a, (hl)
+      000099 28 0F                  209 	jr	Z, 00108$
+                                    210 ;src/savememory.c:62: memcpy(results->MEMORY_TEST, "OK", 2);
+      00009B 11 02 00               211 	ld	de, #0x0002
+      00009E D5                     212 	push	de
+      00009F 11r53r01               213 	ld	de, #___str_3
+      0000A2 D5                     214 	push	de
+      0000A3 C5                     215 	push	bc
+      0000A4 CDr00r00               216 	call	_memcpy
+      0000A7 E8 06                  217 	add	sp, #6
+      0000A9 C9                     218 	ret
+      0000AA                        219 00108$:
+                                    220 ;src/savememory.c:64: memcpy(results->MEMORY_TEST, "NO", 2);
+      0000AA 11 02 00               221 	ld	de, #0x0002
+      0000AD D5                     222 	push	de
+      0000AE 11r56r01               223 	ld	de, #___str_4
+      0000B1 D5                     224 	push	de
+      0000B2 C5                     225 	push	bc
+      0000B3 CDr00r00               226 	call	_memcpy
+      0000B6 E8 06                  227 	add	sp, #6
+      0000B8 C9                     228 	ret
+      0000B9                        229 00122$:
+                                    230 ;src/savememory.c:66: } else if (testType == 4) {
+      0000B9 F8 02                  231 	ldhl	sp,	#2
+      0000BB 2A                     232 	ld	a, (hl+)
+      0000BC D6 04                  233 	sub	a, #0x04
+      0000BE B6                     234 	or	a, (hl)
+      0000BF 20 2A                  235 	jr	NZ, 00119$
+                                    236 ;src/savememory.c:68: memcpy(results->AUDIO_TEST, "OK", 2);
+      0000C1 21 16 00               237 	ld	hl, #0x0016
+      0000C4 09                     238 	add	hl, bc
+      0000C5 4D                     239 	ld	c, l
+      0000C6 44                     240 	ld	b, h
+                                    241 ;src/savememory.c:67: if (testResult) {
+      0000C7 F8 05                  242 	ldhl	sp,	#5
+      0000C9 3A                     243 	ld	a, (hl-)
+      0000CA B6                     244 	or	a, (hl)
+      0000CB 28 0F                  245 	jr	Z, 00111$
+                                    246 ;src/savememory.c:68: memcpy(results->AUDIO_TEST, "OK", 2);
+      0000CD 11 02 00               247 	ld	de, #0x0002
+      0000D0 D5                     248 	push	de
+      0000D1 11r53r01               249 	ld	de, #___str_3
+      0000D4 D5                     250 	push	de
+      0000D5 C5                     251 	push	bc
+      0000D6 CDr00r00               252 	call	_memcpy
+      0000D9 E8 06                  253 	add	sp, #6
+      0000DB C9                     254 	ret
+      0000DC                        255 00111$:
+                                    256 ;src/savememory.c:70: memcpy(results->AUDIO_TEST, "NO", 2);
+      0000DC 11 02 00               257 	ld	de, #0x0002
+      0000DF D5                     258 	push	de
+      0000E0 11r56r01               259 	ld	de, #___str_4
+      0000E3 D5                     260 	push	de
+      0000E4 C5                     261 	push	bc
+      0000E5 CDr00r00               262 	call	_memcpy
+      0000E8 E8 06                  263 	add	sp, #6
+      0000EA C9                     264 	ret
+      0000EB                        265 00119$:
+                                    266 ;src/savememory.c:72: } else if (testType == 5) {
+      0000EB F8 02                  267 	ldhl	sp,	#2
+      0000ED 2A                     268 	ld	a, (hl+)
+      0000EE D6 05                  269 	sub	a, #0x05
+      0000F0 B6                     270 	or	a, (hl)
+      0000F1 C0                     271 	ret	NZ
+                                    272 ;src/savememory.c:74: memcpy(results->LINK_TEST, "OK", 2);
+      0000F2 21 1B 00               273 	ld	hl, #0x001b
+      0000F5 09                     274 	add	hl, bc
+      0000F6 4D                     275 	ld	c, l
+      0000F7 44                     276 	ld	b, h
+                                    277 ;src/savememory.c:73: if (testResult) {
+      0000F8 F8 05                  278 	ldhl	sp,	#5
+      0000FA 3A                     279 	ld	a, (hl-)
+      0000FB B6                     280 	or	a, (hl)
+      0000FC 28 0F                  281 	jr	Z, 00114$
+                                    282 ;src/savememory.c:74: memcpy(results->LINK_TEST, "OK", 2);
+      0000FE 11 02 00               283 	ld	de, #0x0002
+      000101 D5                     284 	push	de
+      000102 11r53r01               285 	ld	de, #___str_3
+      000105 D5                     286 	push	de
+      000106 C5                     287 	push	bc
+      000107 CDr00r00               288 	call	_memcpy
+      00010A E8 06                  289 	add	sp, #6
+      00010C C9                     290 	ret
+      00010D                        291 00114$:
+                                    292 ;src/savememory.c:76: memcpy(results->LINK_TEST, "NO", 2);
+      00010D 11 02 00               293 	ld	de, #0x0002
+      000110 D5                     294 	push	de
+      000111 11r56r01               295 	ld	de, #___str_4
+      000114 D5                     296 	push	de
+      000115 C5                     297 	push	bc
+      000116 CDr00r00               298 	call	_memcpy
+      000119 E8 06                  299 	add	sp, #6
+                                    300 ;src/savememory.c:80: }
+      00011B C9                     301 	ret
+      00011C                        302 ___str_0:
+      00011C 5B 44 42 47 5D 20 28   303 	.ascii "[DBG] (%s:%d @ %s())"
+             25 73 3A 25 64 20 40
+             20 25 73 28 29 29
+      000130 00                     304 	.db 0x00
+      000131                        305 ___str_1:
+      000131 73 72 63 2F 73 61 76   306 	.ascii "src/savememory.c"
+             65 6D 65 6D 6F 72 79
+             2E 63
+      000141 00                     307 	.db 0x00
+      000142                        308 ___str_2:
+      000142 73 61 76 65 5F 74 65   309 	.ascii "save_test_result"
+             73 74 5F 72 65 73 75
+             6C 74
+      000152 00                     310 	.db 0x00
+      000153                        311 ___str_3:
+      000153 4F 4B                  312 	.ascii "OK"
+      000155 00                     313 	.db 0x00
+      000156                        314 ___str_4:
+      000156 4E 4F                  315 	.ascii "NO"
+      000158 00                     316 	.db 0x00
+                                    317 ;src/savememory.c:83: void init_savemem() {
+                                    318 ;	---------------------------------
+                                    319 ; Function init_savemem
+                                    320 ; ---------------------------------
+      000159                        321 _init_savemem::
+                                    322 ;src/savememory.c:84: PRINT_FUNC_INFO;
+      000159 11rD9r02               323 	ld	de, #___str_7
+      00015C D5                     324 	push	de
+      00015D 11 54 00               325 	ld	de, #0x0054
+      000160 D5                     326 	push	de
+      000161 11rC8r02               327 	ld	de, #___str_6
+      000164 D5                     328 	push	de
+      000165 11rB3r02               329 	ld	de, #___str_5
+      000168 D5                     330 	push	de
+      000169 CDr00r00               331 	call	_EMU_printf
+      00016C E8 08                  332 	add	sp, #8
+                                    333 ;src/savememory.c:85: for (UWORD uwI = 0xa000; uwI <= 0x7FFF; uwI+=2)
+      00016E 01 00 A0               334 	ld	bc, #0xa000
+      000171                        335 00103$:
+      000171 3E FF                  336 	ld	a, #0xff
+      000173 B9                     337 	cp	a, c
+      000174 3E 7F                  338 	ld	a, #0x7f
+      000176 98                     339 	sbc	a, b
+      000177 38 0A                  340 	jr	C, 00101$
+                                    341 ;src/savememory.c:87: *(UWORD *)uwI = 0x0000;
+      000179 59                     342 	ld	e, c
+      00017A 50                     343 	ld	d, b
+      00017B AF                     344 	xor	a, a
+      00017C 12                     345 	ld	(de), a
+      00017D 13                     346 	inc	de
+      00017E 12                     347 	ld	(de), a
+                                    348 ;src/savememory.c:85: for (UWORD uwI = 0xa000; uwI <= 0x7FFF; uwI+=2)
+      00017F 03                     349 	inc	bc
+      000180 03                     350 	inc	bc
+      000181 18 EE                  351 	jr	00103$
+      000183                        352 00101$:
+                                    353 ;src/savememory.c:90: memset(results, 0x0, sizeof(TEST_SAVED_RESULTS));
+      000183 21r04r00               354 	ld	hl, #_results
+      000186 2A                     355 	ld	a, (hl+)
+      000187 4F                     356 	ld	c, a
+      000188 46                     357 	ld	b, (hl)
+      000189 11 1D 00               358 	ld	de, #0x001d
+      00018C D5                     359 	push	de
+      00018D 11 00 00               360 	ld	de, #0x0000
+      000190 D5                     361 	push	de
+      000191 C5                     362 	push	bc
+      000192 CDr00r00               363 	call	_memset
+      000195 E8 06                  364 	add	sp, #6
+                                    365 ;src/savememory.c:91: memcpy(results->magic, "fsch", 4);
+      000197 21r04r00               366 	ld	hl, #_results
+      00019A 2A                     367 	ld	a, (hl+)
+      00019B 4F                     368 	ld	c, a
+      00019C 46                     369 	ld	b, (hl)
+      00019D 11 04 00               370 	ld	de, #0x0004
+      0001A0 D5                     371 	push	de
+      0001A1 11rE6r02               372 	ld	de, #___str_8
+      0001A4 D5                     373 	push	de
+      0001A5 C5                     374 	push	bc
+      0001A6 CDr00r00               375 	call	_memcpy
+      0001A9 E8 06                  376 	add	sp, #6
+                                    377 ;src/savememory.c:92: memcpy(results->BUTTON_TEST_MAGIC, "btn", 3);
+      0001AB 21r04r00               378 	ld	hl, #_results
+      0001AE 2A                     379 	ld	a, (hl+)
+      0001AF 4F                     380 	ld	c, a
+      0001B0 46                     381 	ld	b, (hl)
+      0001B1 03                     382 	inc	bc
+      0001B2 03                     383 	inc	bc
+      0001B3 03                     384 	inc	bc
+      0001B4 03                     385 	inc	bc
+      0001B5 11 03 00               386 	ld	de, #0x0003
+      0001B8 D5                     387 	push	de
+      0001B9 11rEBr02               388 	ld	de, #___str_9
+      0001BC D5                     389 	push	de
+      0001BD C5                     390 	push	bc
+      0001BE CDr00r00               391 	call	_memcpy
+      0001C1 E8 06                  392 	add	sp, #6
+                                    393 ;src/savememory.c:93: memcpy(results->MEMORY_TEST_MAGIC, "mem", 3);
+      0001C3 21r04r00               394 	ld	hl, #_results
+      0001C6 2A                     395 	ld	a, (hl+)
+      0001C7 4F                     396 	ld	c, a
+      0001C8 46                     397 	ld	b, (hl)
+      0001C9 21 0E 00               398 	ld	hl, #0x000e
+      0001CC 09                     399 	add	hl, bc
+      0001CD 11 03 00               400 	ld	de, #0x0003
+      0001D0 D5                     401 	push	de
+      0001D1 11rEFr02               402 	ld	de, #___str_10
+      0001D4 D5                     403 	push	de
+      0001D5 E5                     404 	push	hl
+      0001D6 CDr00r00               405 	call	_memcpy
+      0001D9 E8 06                  406 	add	sp, #6
+                                    407 ;src/savememory.c:94: memcpy(results->DISPLAY_TEST_MAGIC, "gfx", 3);
+      0001DB 21r04r00               408 	ld	hl, #_results
+      0001DE 2A                     409 	ld	a, (hl+)
+      0001DF 4F                     410 	ld	c, a
+      0001E0 46                     411 	ld	b, (hl)
+      0001E1 21 09 00               412 	ld	hl, #0x0009
+      0001E4 09                     413 	add	hl, bc
+      0001E5 11 03 00               414 	ld	de, #0x0003
+      0001E8 D5                     415 	push	de
+      0001E9 11rF3r02               416 	ld	de, #___str_11
+      0001EC D5                     417 	push	de
+      0001ED E5                     418 	push	hl
+      0001EE CDr00r00               419 	call	_memcpy
+      0001F1 E8 06                  420 	add	sp, #6
+                                    421 ;src/savememory.c:95: memcpy(results->AUDIO_TEST_MAGIC, "sfx", 3);
+      0001F3 21r04r00               422 	ld	hl, #_results
+      0001F6 2A                     423 	ld	a, (hl+)
+      0001F7 4F                     424 	ld	c, a
+      0001F8 46                     425 	ld	b, (hl)
+      0001F9 21 13 00               426 	ld	hl, #0x0013
+      0001FC 09                     427 	add	hl, bc
+      0001FD 11 03 00               428 	ld	de, #0x0003
+      000200 D5                     429 	push	de
+      000201 11rF7r02               430 	ld	de, #___str_12
+      000204 D5                     431 	push	de
+      000205 E5                     432 	push	hl
+      000206 CDr00r00               433 	call	_memcpy
+      000209 E8 06                  434 	add	sp, #6
+                                    435 ;src/savememory.c:96: memcpy(results->LINK_TEST_MAGIC, "lnk", 3);
+      00020B 21r04r00               436 	ld	hl, #_results
+      00020E 2A                     437 	ld	a, (hl+)
+      00020F 4F                     438 	ld	c, a
+      000210 46                     439 	ld	b, (hl)
+      000211 21 18 00               440 	ld	hl, #0x0018
+      000214 09                     441 	add	hl, bc
+      000215 11 03 00               442 	ld	de, #0x0003
+      000218 D5                     443 	push	de
+      000219 11rFBr02               444 	ld	de, #___str_13
+      00021C D5                     445 	push	de
+      00021D E5                     446 	push	hl
+      00021E CDr00r00               447 	call	_memcpy
+      000221 E8 06                  448 	add	sp, #6
+                                    449 ;src/savememory.c:97: memcpy(results->BUTTON_TEST, "NO", 2);
+      000223 21r04r00               450 	ld	hl, #_results
+      000226 2A                     451 	ld	a, (hl+)
+      000227 4F                     452 	ld	c, a
+      000228 46                     453 	ld	b, (hl)
+      000229 21 07 00               454 	ld	hl, #0x0007
+      00022C 09                     455 	add	hl, bc
+      00022D 11 02 00               456 	ld	de, #0x0002
+      000230 D5                     457 	push	de
+      000231 11rFFr02               458 	ld	de, #___str_14
+      000234 D5                     459 	push	de
+      000235 E5                     460 	push	hl
+      000236 CDr00r00               461 	call	_memcpy
+      000239 E8 06                  462 	add	sp, #6
+                                    463 ;src/savememory.c:98: memcpy(results->DISPLAY_TEST, "NO", 2);
+      00023B 21r04r00               464 	ld	hl, #_results
+      00023E 2A                     465 	ld	a, (hl+)
+      00023F 4F                     466 	ld	c, a
+      000240 46                     467 	ld	b, (hl)
+      000241 21 0C 00               468 	ld	hl, #0x000c
+      000244 09                     469 	add	hl, bc
+      000245 11 02 00               470 	ld	de, #0x0002
+      000248 D5                     471 	push	de
+      000249 11rFFr02               472 	ld	de, #___str_14
+      00024C D5                     473 	push	de
+      00024D E5                     474 	push	hl
+      00024E CDr00r00               475 	call	_memcpy
+      000251 E8 06                  476 	add	sp, #6
+                                    477 ;src/savememory.c:99: memcpy(results->MEMORY_TEST, "NO", 2);
+      000253 21r04r00               478 	ld	hl, #_results
+      000256 2A                     479 	ld	a, (hl+)
+      000257 4F                     480 	ld	c, a
+      000258 46                     481 	ld	b, (hl)
+      000259 21 11 00               482 	ld	hl, #0x0011
+      00025C 09                     483 	add	hl, bc
+      00025D 11 02 00               484 	ld	de, #0x0002
+      000260 D5                     485 	push	de
+      000261 11rFFr02               486 	ld	de, #___str_14
+      000264 D5                     487 	push	de
+      000265 E5                     488 	push	hl
+      000266 CDr00r00               489 	call	_memcpy
+      000269 E8 06                  490 	add	sp, #6
+                                    491 ;src/savememory.c:100: memcpy(results->AUDIO_TEST, "NO", 2);
+      00026B 21r04r00               492 	ld	hl, #_results
+      00026E 2A                     493 	ld	a, (hl+)
+      00026F 4F                     494 	ld	c, a
+      000270 46                     495 	ld	b, (hl)
+      000271 21 16 00               496 	ld	hl, #0x0016
+      000274 09                     497 	add	hl, bc
+      000275 11 02 00               498 	ld	de, #0x0002
+      000278 D5                     499 	push	de
+      000279 11rFFr02               500 	ld	de, #___str_14
+      00027C D5                     501 	push	de
+      00027D E5                     502 	push	hl
+      00027E CDr00r00               503 	call	_memcpy
+      000281 E8 06                  504 	add	sp, #6
+                                    505 ;src/savememory.c:101: memcpy(results->LINK_TEST, "NO", 2);
+      000283 21r04r00               506 	ld	hl, #_results
+      000286 2A                     507 	ld	a, (hl+)
+      000287 4F                     508 	ld	c, a
+      000288 46                     509 	ld	b, (hl)
+      000289 21 1B 00               510 	ld	hl, #0x001b
+      00028C 09                     511 	add	hl, bc
+      00028D 11 02 00               512 	ld	de, #0x0002
+      000290 D5                     513 	push	de
+      000291 11rFFr02               514 	ld	de, #___str_14
+      000294 D5                     515 	push	de
+      000295 E5                     516 	push	hl
+      000296 CDr00r00               517 	call	_memcpy
+      000299 E8 06                  518 	add	sp, #6
+                                    519 ;src/savememory.c:103: endData[0] = 0x4141;
+      00029B 21r06r00               520 	ld	hl, #_endData
+      00029E 6E                     521 	ld	l, (hl)
+                                    522 ;	spillPairReg hl
+                                    523 ;	spillPairReg hl
+      00029F FAr07r00               524 	ld	a, (_endData + 1)
+      0002A2 67                     525 	ld	h, a
+                                    526 ;	spillPairReg hl
+                                    527 ;	spillPairReg hl
+      0002A3 3E 41                  528 	ld	a, #0x41
+      0002A5 22                     529 	ld	(hl+), a
+      0002A6 36 41                  530 	ld	(hl), #0x41
+                                    531 ;src/savememory.c:104: firstRunByte[0] = 1;
+      0002A8 21r02r00               532 	ld	hl, #_firstRunByte
+      0002AB 6E                     533 	ld	l, (hl)
+                                    534 ;	spillPairReg hl
+                                    535 ;	spillPairReg hl
+      0002AC FAr03r00               536 	ld	a, (_firstRunByte + 1)
+      0002AF 67                     537 	ld	h, a
+                                    538 ;	spillPairReg hl
+                                    539 ;	spillPairReg hl
+      0002B0 36 01                  540 	ld	(hl), #0x01
+                                    541 ;src/savememory.c:105: }
+      0002B2 C9                     542 	ret
+      0002B3                        543 ___str_5:
+      0002B3 5B 44 42 47 5D 20 28   544 	.ascii "[DBG] (%s:%d @ %s())"
+             25 73 3A 25 64 20 40
+             20 25 73 28 29 29
+      0002C7 00                     545 	.db 0x00
+      0002C8                        546 ___str_6:
+      0002C8 73 72 63 2F 73 61 76   547 	.ascii "src/savememory.c"
+             65 6D 65 6D 6F 72 79
+             2E 63
+      0002D8 00                     548 	.db 0x00
+      0002D9                        549 ___str_7:
+      0002D9 69 6E 69 74 5F 73 61   550 	.ascii "init_savemem"
+             76 65 6D 65 6D
+      0002E5 00                     551 	.db 0x00
+      0002E6                        552 ___str_8:
+      0002E6 66 73 63 68            553 	.ascii "fsch"
+      0002EA 00                     554 	.db 0x00
+      0002EB                        555 ___str_9:
+      0002EB 62 74 6E               556 	.ascii "btn"
+      0002EE 00                     557 	.db 0x00
+      0002EF                        558 ___str_10:
+      0002EF 6D 65 6D               559 	.ascii "mem"
+      0002F2 00                     560 	.db 0x00
+      0002F3                        561 ___str_11:
+      0002F3 67 66 78               562 	.ascii "gfx"
+      0002F6 00                     563 	.db 0x00
+      0002F7                        564 ___str_12:
+      0002F7 73 66 78               565 	.ascii "sfx"
+      0002FA 00                     566 	.db 0x00
+      0002FB                        567 ___str_13:
+      0002FB 6C 6E 6B               568 	.ascii "lnk"
+      0002FE 00                     569 	.db 0x00
+      0002FF                        570 ___str_14:
+      0002FF 4E 4F                  571 	.ascii "NO"
+      000301 00                     572 	.db 0x00
+                                    573 ;src/savememory.c:108: void check_savemem() {
+                                    574 ;	---------------------------------
+                                    575 ; Function check_savemem
+                                    576 ; ---------------------------------
+      000302                        577 _check_savemem::
+                                    578 ;src/savememory.c:109: PRINT_FUNC_INFO;
+      000302 11r49r03               579 	ld	de, #___str_17
+      000305 D5                     580 	push	de
+      000306 11 6D 00               581 	ld	de, #0x006d
+      000309 D5                     582 	push	de
+      00030A 11r38r03               583 	ld	de, #___str_16
+      00030D D5                     584 	push	de
+      00030E 11r23r03               585 	ld	de, #___str_15
+      000311 D5                     586 	push	de
+      000312 CDr00r00               587 	call	_EMU_printf
+      000315 E8 08                  588 	add	sp, #8
+                                    589 ;src/savememory.c:111: if (firstRunByte[0] != 0x1) {
+      000317 21r02r00               590 	ld	hl, #_firstRunByte
+      00031A 2A                     591 	ld	a, (hl+)
+      00031B 4F                     592 	ld	c, a
+      00031C 46                     593 	ld	b, (hl)
+      00031D 0A                     594 	ld	a, (bc)
+      00031E 3D                     595 	dec	a
+                                    596 ;src/savememory.c:112: init_savemem();
+      00031F C2r59r01               597 	jp	NZ,_init_savemem
+                                    598 ;src/savememory.c:115: }
+      000322 C9                     599 	ret
+      000323                        600 ___str_15:
+      000323 5B 44 42 47 5D 20 28   601 	.ascii "[DBG] (%s:%d @ %s())"
+             25 73 3A 25 64 20 40
+             20 25 73 28 29 29
+      000337 00                     602 	.db 0x00
+      000338                        603 ___str_16:
+      000338 73 72 63 2F 73 61 76   604 	.ascii "src/savememory.c"
+             65 6D 65 6D 6F 72 79
+             2E 63
+      000348 00                     605 	.db 0x00
+      000349                        606 ___str_17:
+      000349 63 68 65 63 6B 5F 73   607 	.ascii "check_savemem"
+             61 76 65 6D 65 6D
+      000356 00                     608 	.db 0x00
+                                    609 ;src/savememory.c:117: void print_counter() {
+                                    610 ;	---------------------------------
+                                    611 ; Function print_counter
+                                    612 ; ---------------------------------
+      000357                        613 _print_counter::
+      000357 E8 F0                  614 	add	sp, #-16
+                                    615 ;src/savememory.c:118: EMU_printf("counter is %u\n", memTestCounter);
+      000359 21r08r00               616 	ld	hl, #_memTestCounter
+      00035C 2A                     617 	ld	a, (hl+)
+      00035D 5F                     618 	ld	e, a
+      00035E 56                     619 	ld	d, (hl)
+      00035F D5                     620 	push	de
+      000360 11r8Dr03               621 	ld	de, #___str_18
+      000363 D5                     622 	push	de
+      000364 CDr00r00               623 	call	_EMU_printf
+      000367 E8 04                  624 	add	sp, #4
+                                    625 ;src/savememory.c:120: sprintf(buff, "Counter is %u", memTestCounter);
+      000369 F8 00                  626 	ldhl	sp,	#0
+      00036B 4D                     627 	ld	c, l
+      00036C 44                     628 	ld	b, h
+      00036D 59                     629 	ld	e, c
+      00036E 50                     630 	ld	d, b
+      00036F C5                     631 	push	bc
+      000370 21r08r00               632 	ld	hl, #_memTestCounter
+      000373 6E                     633 	ld	l, (hl)
+                                    634 ;	spillPairReg hl
+                                    635 ;	spillPairReg hl
+      000374 FAr09r00               636 	ld	a, (_memTestCounter + 1)
+      000377 67                     637 	ld	h, a
+                                    638 ;	spillPairReg hl
+                                    639 ;	spillPairReg hl
+      000378 E5                     640 	push	hl
+      000379 21r9Cr03               641 	ld	hl, #___str_19
+      00037C E5                     642 	push	hl
+      00037D D5                     643 	push	de
+      00037E CDr00r00               644 	call	_sprintf
+      000381 E8 06                  645 	add	sp, #6
+      000383 21 02 05               646 	ld	hl, #0x502
+      000386 E5                     647 	push	hl
+      000387 CDr00r00               648 	call	_text_print_string_bkg
+                                    649 ;src/savememory.c:122: }
+      00038A E8 14                  650 	add	sp, #20
+      00038C C9                     651 	ret
+      00038D                        652 ___str_18:
+      00038D 63 6F 75 6E 74 65 72   653 	.ascii "counter is %u"
+             20 69 73 20 25 75
+      00039A 0A                     654 	.db 0x0a
+      00039B 00                     655 	.db 0x00
+      00039C                        656 ___str_19:
+      00039C 43 6F 75 6E 74 65 72   657 	.ascii "Counter is %u"
+             20 69 73 20 25 75
+      0003A9 00                     658 	.db 0x00
+                                    659 ;src/savememory.c:124: int mem_test() {
+                                    660 ;	---------------------------------
+                                    661 ; Function mem_test
+                                    662 ; ---------------------------------
+      0003AA                        663 _mem_test::
+                                    664 ;src/savememory.c:125: PRINT_FUNC_INFO;
+      0003AA 11r32r06               665 	ld	de, #___str_22
+      0003AD D5                     666 	push	de
+      0003AE 11 7D 00               667 	ld	de, #0x007d
+      0003B1 D5                     668 	push	de
+      0003B2 11r21r06               669 	ld	de, #___str_21
+      0003B5 D5                     670 	push	de
+      0003B6 11r0Cr06               671 	ld	de, #___str_20
+      0003B9 D5                     672 	push	de
+      0003BA CDr00r00               673 	call	_EMU_printf
+      0003BD E8 08                  674 	add	sp, #8
+                                    675 ;src/savememory.c:126: if (memTestCounter != 0) {
+      0003BF 21r09r00               676 	ld	hl, #_memTestCounter + 1
+      0003C2 3A                     677 	ld	a, (hl-)
+      0003C3 B6                     678 	or	a, (hl)
+      0003C4 28 03                  679 	jr	Z, 00102$
+                                    680 ;src/savememory.c:127: memTestCounter = 0;
+      0003C6 AF                     681 	xor	a, a
+      0003C7 22                     682 	ld	(hl+), a
+      0003C8 77                     683 	ld	(hl), a
+      0003C9                        684 00102$:
+                                    685 ;src/savememory.c:131: ENABLE_RAM_MBC1;
+      0003C9 21 00 00               686 	ld	hl, #0x0000
+      0003CC 36 0A                  687 	ld	(hl), #0x0a
+                                    688 ;src/savememory.c:133: text_print_string_bkg(TEXT_X_OFFSET, 2, "CHECKING MEMORY");
+      0003CE 11r3Br06               689 	ld	de, #___str_23
+      0003D1 D5                     690 	push	de
+      0003D2 21 01 02               691 	ld	hl, #0x201
+      0003D5 E5                     692 	push	hl
+      0003D6 CDr00r00               693 	call	_text_print_string_bkg
+      0003D9 E8 04                  694 	add	sp, #4
+                                    695 ;src/savememory.c:134: if (results->magic[0] == 0x66 && results->magic[1] == 0x73 && results->magic[2] == 0x63 && results->magic[3] == 0x68) {
+      0003DB 21r04r00               696 	ld	hl, #_results
+      0003DE 2A                     697 	ld	a, (hl+)
+      0003DF 4F                     698 	ld	c, a
+      0003E0 46                     699 	ld	b, (hl)
+      0003E1 0A                     700 	ld	a, (bc)
+      0003E2 D6 66                  701 	sub	a, #0x66
+      0003E4 20 2C                  702 	jr	NZ, 00104$
+      0003E6 2B                     703 	dec	hl
+      0003E7 2A                     704 	ld	a, (hl+)
+      0003E8 4F                     705 	ld	c, a
+      0003E9 46                     706 	ld	b, (hl)
+      0003EA 59                     707 	ld	e, c
+      0003EB 50                     708 	ld	d, b
+      0003EC 13                     709 	inc	de
+      0003ED 1A                     710 	ld	a, (de)
+      0003EE D6 73                  711 	sub	a, #0x73
+      0003F0 20 20                  712 	jr	NZ, 00104$
+      0003F2 59                     713 	ld	e, c
+      0003F3 50                     714 	ld	d, b
+      0003F4 13                     715 	inc	de
+      0003F5 13                     716 	inc	de
+      0003F6 1A                     717 	ld	a, (de)
+      0003F7 D6 63                  718 	sub	a, #0x63
+      0003F9 20 17                  719 	jr	NZ, 00104$
+      0003FB 03                     720 	inc	bc
+      0003FC 03                     721 	inc	bc
+      0003FD 03                     722 	inc	bc
+      0003FE 0A                     723 	ld	a, (bc)
+      0003FF D6 68                  724 	sub	a, #0x68
+      000401 20 0F                  725 	jr	NZ, 00104$
+                                    726 ;src/savememory.c:135: text_print_string_bkg(TEXT_X_OFFSET, 3, "MAGIC OK");
+      000403 11r4Br06               727 	ld	de, #___str_24
+      000406 D5                     728 	push	de
+      000407 21 01 03               729 	ld	hl, #0x301
+      00040A E5                     730 	push	hl
+      00040B CDr00r00               731 	call	_text_print_string_bkg
+      00040E E8 04                  732 	add	sp, #4
+      000410 18 26                  733 	jr	00105$
+      000412                        734 00104$:
+                                    735 ;src/savememory.c:137: text_print_string_bkg(TEXT_X_OFFSET, 3, "BAD MAGIC");
+      000412 11r54r06               736 	ld	de, #___str_25
+      000415 D5                     737 	push	de
+      000416 21 01 03               738 	ld	hl, #0x301
+      000419 E5                     739 	push	hl
+      00041A CDr00r00               740 	call	_text_print_string_bkg
+      00041D E8 04                  741 	add	sp, #4
+                                    742 ;src/savememory.c:138: text_print_string_bkg(TEXT_X_OFFSET, 5, "TEST FAILED");
+      00041F 11r5Er06               743 	ld	de, #___str_26
+      000422 D5                     744 	push	de
+      000423 21 01 05               745 	ld	hl, #0x501
+      000426 E5                     746 	push	hl
+      000427 CDr00r00               747 	call	_text_print_string_bkg
+      00042A E8 04                  748 	add	sp, #4
+                                    749 ;src/savememory.c:139: delay(5000);
+      00042C 11 88 13               750 	ld	de, #0x1388
+      00042F D5                     751 	push	de
+      000430 CDr00r00               752 	call	_delay
+      000433 E1                     753 	pop	hl
+                                    754 ;src/savememory.c:141: return TEST_FAILED;
+      000434 11 69 00               755 	ld	de, #0x0069
+      000437 C9                     756 	ret
+      000438                        757 00105$:
+                                    758 ;src/savememory.c:146: hiramcpy((uint8_t)&hiram_buffer, (void *)&inc, (uint8_t)object_distance(inc, inc_end));
+      000438 3Er08                  759 	ld	a, #<(_inc_end)
+      00043A 01r00r00               760 	ld	bc, #_inc
+      00043D 59                     761 	ld	e, c
+      00043E 93                     762 	sub	a, e
+      00043F 57                     763 	ld	d, a
+      000440 3Er00                  764 	ld	a, #<(_hiram_buffer)
+      000442 D5                     765 	push	de
+      000443 33                     766 	inc	sp
+      000444 C5                     767 	push	bc
+      000445 F5                     768 	push	af
+      000446 33                     769 	inc	sp
+      000447 CDr00r00               770 	call	_hiramcpy
+      00044A E8 04                  771 	add	sp, #4
+                                    772 ;src/savememory.c:147: memcpy(&ram_buffer, (void *)&inc, (uint16_t)object_distance(inc, inc_end));
+      00044C 3Er08                  773 	ld	a, #<(_inc_end)
+      00044E 16s00                  774 	ld	d, #>(_inc_end)
+      000450 01r00r00               775 	ld	bc, #_inc
+      000453 91                     776 	sub	a, c
+      000454 5F                     777 	ld	e, a
+      000455 7A                     778 	ld	a, d
+      000456 98                     779 	sbc	a, b
+      000457 57                     780 	ld	d, a
+      000458 D5                     781 	push	de
+      000459 C5                     782 	push	bc
+      00045A 11r00r00               783 	ld	de, #_ram_buffer
+      00045D D5                     784 	push	de
+      00045E CDr00r00               785 	call	_memcpy
+      000461 E8 06                  786 	add	sp, #6
+                                    787 ;src/savememory.c:150: text_print_string_bkg(TEXT_X_OFFSET, 4, "Call ROM");
+      000463 11r6Ar06               788 	ld	de, #___str_27
+      000466 D5                     789 	push	de
+      000467 21 01 04               790 	ld	hl, #0x401
+      00046A E5                     791 	push	hl
+      00046B CDr00r00               792 	call	_text_print_string_bkg
+      00046E E8 04                  793 	add	sp, #4
+                                    794 ;src/savememory.c:151: inc();
+      000470 CDr00r00               795 	call	_inc
+                                    796 ;src/savememory.c:152: print_counter();
+      000473 CDr57r03               797 	call	_print_counter
+                                    798 ;src/savememory.c:153: if (memTestCounter != 1) {
+      000476 21r08r00               799 	ld	hl, #_memTestCounter
+      000479 2A                     800 	ld	a, (hl+)
+      00047A 4F                     801 	ld	c, a
+      00047B 46                     802 	ld	b, (hl)
+      00047C 79                     803 	ld	a, c
+      00047D 3D                     804 	dec	a
+      00047E B0                     805 	or	a, b
+      00047F 28 26                  806 	jr	Z, 00110$
+                                    807 ;src/savememory.c:154: text_print_string_bkg(TEXT_X_OFFSET, 6, "Bad counter...");
+      000481 11r73r06               808 	ld	de, #___str_28
+      000484 D5                     809 	push	de
+      000485 21 01 06               810 	ld	hl, #0x601
+      000488 E5                     811 	push	hl
+      000489 CDr00r00               812 	call	_text_print_string_bkg
+      00048C E8 04                  813 	add	sp, #4
+                                    814 ;src/savememory.c:155: text_print_string_bkg(TEXT_X_OFFSET, 8, "TEST FAILED");
+      00048E 11r5Er06               815 	ld	de, #___str_26
+      000491 D5                     816 	push	de
+      000492 21 01 08               817 	ld	hl, #0x801
+      000495 E5                     818 	push	hl
+      000496 CDr00r00               819 	call	_text_print_string_bkg
+      000499 E8 04                  820 	add	sp, #4
+                                    821 ;src/savememory.c:156: delay(5000);
+      00049B 11 88 13               822 	ld	de, #0x1388
+      00049E D5                     823 	push	de
+      00049F CDr00r00               824 	call	_delay
+      0004A2 E1                     825 	pop	hl
+                                    826 ;src/savememory.c:157: return TEST_FAILED;
+      0004A3 11 69 00               827 	ld	de, #0x0069
+      0004A6 C9                     828 	ret
+      0004A7                        829 00110$:
+                                    830 ;src/savememory.c:159: delay(1000);
+      0004A7 11 E8 03               831 	ld	de, #0x03e8
+      0004AA D5                     832 	push	de
+      0004AB CDr00r00               833 	call	_delay
+      0004AE E1                     834 	pop	hl
+                                    835 ;src/savememory.c:162: text_print_string_bkg(TEXT_X_OFFSET, 4, "Call RAM indirect");
+      0004AF 11r82r06               836 	ld	de, #___str_29
+      0004B2 D5                     837 	push	de
+      0004B3 21 01 04               838 	ld	hl, #0x401
+      0004B6 E5                     839 	push	hl
+      0004B7 CDr00r00               840 	call	_text_print_string_bkg
+      0004BA E8 04                  841 	add	sp, #4
+                                    842 ;src/savememory.c:163: inc_ram();
+      0004BC CDr00r00               843 	call	_inc_ram
+                                    844 ;src/savememory.c:164: print_counter();
+      0004BF CDr57r03               845 	call	_print_counter
+                                    846 ;src/savememory.c:165: if (memTestCounter != 2) {
+      0004C2 21r08r00               847 	ld	hl, #_memTestCounter
+      0004C5 2A                     848 	ld	a, (hl+)
+      0004C6 4F                     849 	ld	c, a
+      0004C7 46                     850 	ld	b, (hl)
+      0004C8 79                     851 	ld	a, c
+      0004C9 D6 02                  852 	sub	a, #0x02
+      0004CB B0                     853 	or	a, b
+      0004CC 28 26                  854 	jr	Z, 00112$
+                                    855 ;src/savememory.c:166: text_print_string_bkg(TEXT_X_OFFSET, 6, "Bad counter...");
+      0004CE 11r73r06               856 	ld	de, #___str_28
+      0004D1 D5                     857 	push	de
+      0004D2 21 01 06               858 	ld	hl, #0x601
+      0004D5 E5                     859 	push	hl
+      0004D6 CDr00r00               860 	call	_text_print_string_bkg
+      0004D9 E8 04                  861 	add	sp, #4
+                                    862 ;src/savememory.c:167: text_print_string_bkg(TEXT_X_OFFSET, 8, "TEST FAILED");
+      0004DB 11r5Er06               863 	ld	de, #___str_26
+      0004DE D5                     864 	push	de
+      0004DF 21 01 08               865 	ld	hl, #0x801
+      0004E2 E5                     866 	push	hl
+      0004E3 CDr00r00               867 	call	_text_print_string_bkg
+      0004E6 E8 04                  868 	add	sp, #4
+                                    869 ;src/savememory.c:168: delay(5000);
+      0004E8 11 88 13               870 	ld	de, #0x1388
+      0004EB D5                     871 	push	de
+      0004EC CDr00r00               872 	call	_delay
+      0004EF E1                     873 	pop	hl
+                                    874 ;src/savememory.c:169: return TEST_FAILED;
+      0004F0 11 69 00               875 	ld	de, #0x0069
+      0004F3 C9                     876 	ret
+      0004F4                        877 00112$:
+                                    878 ;src/savememory.c:171: delay(1000);
+      0004F4 11 E8 03               879 	ld	de, #0x03e8
+      0004F7 D5                     880 	push	de
+      0004F8 CDr00r00               881 	call	_delay
+      0004FB E1                     882 	pop	hl
+                                    883 ;src/savememory.c:174: text_print_string_bkg(TEXT_X_OFFSET, 4, "Call RAM indirect");
+      0004FC 11r82r06               884 	ld	de, #___str_29
+      0004FF D5                     885 	push	de
+      000500 21 01 04               886 	ld	hl, #0x401
+      000503 E5                     887 	push	hl
+      000504 CDr00r00               888 	call	_text_print_string_bkg
+      000507 E8 04                  889 	add	sp, #4
+                                    890 ;src/savememory.c:175: inc_ram_var();
+      000509 21r0Ar00               891 	ld	hl, #_inc_ram_var
+      00050C 6E                     892 	ld	l, (hl)
+                                    893 ;	spillPairReg hl
+                                    894 ;	spillPairReg hl
+      00050D FAr0Br00               895 	ld	a, (_inc_ram_var + 1)
+      000510 67                     896 	ld	h, a
+                                    897 ;	spillPairReg hl
+                                    898 ;	spillPairReg hl
+      000511 CDr00r00               899 	call	___sdcc_call_hl
+                                    900 ;src/savememory.c:176: print_counter();
+      000514 CDr57r03               901 	call	_print_counter
+                                    902 ;src/savememory.c:177: if (memTestCounter != 3) {
+      000517 21r08r00               903 	ld	hl, #_memTestCounter
+      00051A 2A                     904 	ld	a, (hl+)
+      00051B 4F                     905 	ld	c, a
+      00051C 46                     906 	ld	b, (hl)
+      00051D 79                     907 	ld	a, c
+      00051E D6 03                  908 	sub	a, #0x03
+      000520 B0                     909 	or	a, b
+      000521 28 26                  910 	jr	Z, 00114$
+                                    911 ;src/savememory.c:178: text_print_string_bkg(TEXT_X_OFFSET, 6, "Bad counter...");
+      000523 11r73r06               912 	ld	de, #___str_28
+      000526 D5                     913 	push	de
+      000527 21 01 06               914 	ld	hl, #0x601
+      00052A E5                     915 	push	hl
+      00052B CDr00r00               916 	call	_text_print_string_bkg
+      00052E E8 04                  917 	add	sp, #4
+                                    918 ;src/savememory.c:179: text_print_string_bkg(TEXT_X_OFFSET, 8, "TEST FAILED");
+      000530 11r5Er06               919 	ld	de, #___str_26
+      000533 D5                     920 	push	de
+      000534 21 01 08               921 	ld	hl, #0x801
+      000537 E5                     922 	push	hl
+      000538 CDr00r00               923 	call	_text_print_string_bkg
+      00053B E8 04                  924 	add	sp, #4
+                                    925 ;src/savememory.c:180: delay(5000);
+      00053D 11 88 13               926 	ld	de, #0x1388
+      000540 D5                     927 	push	de
+      000541 CDr00r00               928 	call	_delay
+      000544 E1                     929 	pop	hl
+                                    930 ;src/savememory.c:181: return TEST_FAILED;
+      000545 11 69 00               931 	ld	de, #0x0069
+      000548 C9                     932 	ret
+      000549                        933 00114$:
+                                    934 ;src/savememory.c:183: delay(1000);
+      000549 11 E8 03               935 	ld	de, #0x03e8
+      00054C D5                     936 	push	de
+      00054D CDr00r00               937 	call	_delay
+      000550 E1                     938 	pop	hl
+                                    939 ;src/savememory.c:186: text_print_string_bkg(TEXT_X_OFFSET, 4, "Call HIRAM         ");
+      000551 11r94r06               940 	ld	de, #___str_30
+      000554 D5                     941 	push	de
+      000555 21 01 04               942 	ld	hl, #0x401
+      000558 E5                     943 	push	hl
+      000559 CDr00r00               944 	call	_text_print_string_bkg
+      00055C E8 04                  945 	add	sp, #4
+                                    946 ;src/savememory.c:187: inc_hiram();
+      00055E CDr00r00               947 	call	_inc_hiram
+                                    948 ;src/savememory.c:188: print_counter();
+      000561 CDr57r03               949 	call	_print_counter
+                                    950 ;src/savememory.c:189: if (memTestCounter != 4) {
+      000564 21r08r00               951 	ld	hl, #_memTestCounter
+      000567 2A                     952 	ld	a, (hl+)
+      000568 4F                     953 	ld	c, a
+      000569 46                     954 	ld	b, (hl)
+      00056A 79                     955 	ld	a, c
+      00056B D6 04                  956 	sub	a, #0x04
+      00056D B0                     957 	or	a, b
+      00056E 28 26                  958 	jr	Z, 00116$
+                                    959 ;src/savememory.c:190: text_print_string_bkg(TEXT_X_OFFSET, 6, "Bad counter...");
+      000570 11r73r06               960 	ld	de, #___str_28
+      000573 D5                     961 	push	de
+      000574 21 01 06               962 	ld	hl, #0x601
+      000577 E5                     963 	push	hl
+      000578 CDr00r00               964 	call	_text_print_string_bkg
+      00057B E8 04                  965 	add	sp, #4
+                                    966 ;src/savememory.c:191: text_print_string_bkg(TEXT_X_OFFSET, 8, "TEST FAILED");
+      00057D 11r5Er06               967 	ld	de, #___str_26
+      000580 D5                     968 	push	de
+      000581 21 01 08               969 	ld	hl, #0x801
+      000584 E5                     970 	push	hl
+      000585 CDr00r00               971 	call	_text_print_string_bkg
+      000588 E8 04                  972 	add	sp, #4
+                                    973 ;src/savememory.c:192: delay(5000);
+      00058A 11 88 13               974 	ld	de, #0x1388
+      00058D D5                     975 	push	de
+      00058E CDr00r00               976 	call	_delay
+      000591 E1                     977 	pop	hl
+                                    978 ;src/savememory.c:193: return TEST_FAILED;
+      000592 11 69 00               979 	ld	de, #0x0069
+      000595 C9                     980 	ret
+      000596                        981 00116$:
+                                    982 ;src/savememory.c:195: delay(1000);
+      000596 11 E8 03               983 	ld	de, #0x03e8
+      000599 D5                     984 	push	de
+      00059A CDr00r00               985 	call	_delay
+      00059D E1                     986 	pop	hl
+                                    987 ;src/savememory.c:198: text_print_string_bkg(TEXT_X_OFFSET, 4, "Call HIRAM indirect");
+      00059E 11rA8r06               988 	ld	de, #___str_31
+      0005A1 D5                     989 	push	de
+      0005A2 21 01 04               990 	ld	hl, #0x401
+      0005A5 E5                     991 	push	hl
+      0005A6 CDr00r00               992 	call	_text_print_string_bkg
+      0005A9 E8 04                  993 	add	sp, #4
+                                    994 ;src/savememory.c:199: inc_hiram_var();
+      0005AB 21r0Cr00               995 	ld	hl, #_inc_hiram_var
+      0005AE 6E                     996 	ld	l, (hl)
+                                    997 ;	spillPairReg hl
+                                    998 ;	spillPairReg hl
+      0005AF FAr0Dr00               999 	ld	a, (_inc_hiram_var + 1)
+      0005B2 67                    1000 	ld	h, a
+                                   1001 ;	spillPairReg hl
+                                   1002 ;	spillPairReg hl
+      0005B3 CDr00r00              1003 	call	___sdcc_call_hl
+                                   1004 ;src/savememory.c:200: print_counter();
+      0005B6 CDr57r03              1005 	call	_print_counter
+                                   1006 ;src/savememory.c:201: if (memTestCounter != 5) {
+      0005B9 21r08r00              1007 	ld	hl, #_memTestCounter
+      0005BC 2A                    1008 	ld	a, (hl+)
+      0005BD 4F                    1009 	ld	c, a
+      0005BE 46                    1010 	ld	b, (hl)
+      0005BF 79                    1011 	ld	a, c
+      0005C0 D6 05                 1012 	sub	a, #0x05
+      0005C2 B0                    1013 	or	a, b
+      0005C3 28 26                 1014 	jr	Z, 00118$
+                                   1015 ;src/savememory.c:202: text_print_string_bkg(TEXT_X_OFFSET, 6, "Bad counter...");
+      0005C5 11r73r06              1016 	ld	de, #___str_28
+      0005C8 D5                    1017 	push	de
+      0005C9 21 01 06              1018 	ld	hl, #0x601
+      0005CC E5                    1019 	push	hl
+      0005CD CDr00r00              1020 	call	_text_print_string_bkg
+      0005D0 E8 04                 1021 	add	sp, #4
+                                   1022 ;src/savememory.c:203: text_print_string_bkg(TEXT_X_OFFSET, 8, "TEST FAILED");
+      0005D2 11r5Er06              1023 	ld	de, #___str_26
+      0005D5 D5                    1024 	push	de
+      0005D6 21 01 08              1025 	ld	hl, #0x801
+      0005D9 E5                    1026 	push	hl
+      0005DA CDr00r00              1027 	call	_text_print_string_bkg
+      0005DD E8 04                 1028 	add	sp, #4
+                                   1029 ;src/savememory.c:204: delay(5000);
+      0005DF 11 88 13              1030 	ld	de, #0x1388
+      0005E2 D5                    1031 	push	de
+      0005E3 CDr00r00              1032 	call	_delay
+      0005E6 E1                    1033 	pop	hl
+                                   1034 ;src/savememory.c:205: return TEST_FAILED;
+      0005E7 11 69 00              1035 	ld	de, #0x0069
+      0005EA C9                    1036 	ret
+      0005EB                       1037 00118$:
+                                   1038 ;src/savememory.c:207: delay(1000);
+      0005EB 11 E8 03              1039 	ld	de, #0x03e8
+      0005EE D5                    1040 	push	de
+      0005EF CDr00r00              1041 	call	_delay
+      0005F2 E1                    1042 	pop	hl
+                                   1043 ;src/savememory.c:209: text_print_string_bkg(TEXT_X_OFFSET, 8, "TEST PASSED");
+      0005F3 11rBCr06              1044 	ld	de, #___str_32
+      0005F6 D5                    1045 	push	de
+      0005F7 21 01 08              1046 	ld	hl, #0x801
+      0005FA E5                    1047 	push	hl
+      0005FB CDr00r00              1048 	call	_text_print_string_bkg
+      0005FE E8 04                 1049 	add	sp, #4
+                                   1050 ;src/savememory.c:210: delay(5000);
+      000600 11 88 13              1051 	ld	de, #0x1388
+      000603 D5                    1052 	push	de
+      000604 CDr00r00              1053 	call	_delay
+      000607 E1                    1054 	pop	hl
+                                   1055 ;src/savememory.c:211: return TEST_PASSED;
+      000608 11 25 00              1056 	ld	de, #0x0025
+                                   1057 ;src/savememory.c:212: }
+      00060B C9                    1058 	ret
+      00060C                       1059 ___str_20:
+      00060C 5B 44 42 47 5D 20 28  1060 	.ascii "[DBG] (%s:%d @ %s())"
+             25 73 3A 25 64 20 40
+             20 25 73 28 29 29
+      000620 00                    1061 	.db 0x00
+      000621                       1062 ___str_21:
+      000621 73 72 63 2F 73 61 76  1063 	.ascii "src/savememory.c"
+             65 6D 65 6D 6F 72 79
+             2E 63
+      000631 00                    1064 	.db 0x00
+      000632                       1065 ___str_22:
+      000632 6D 65 6D 5F 74 65 73  1066 	.ascii "mem_test"
+             74
+      00063A 00                    1067 	.db 0x00
+      00063B                       1068 ___str_23:
+      00063B 43 48 45 43 4B 49 4E  1069 	.ascii "CHECKING MEMORY"
+             47 20 4D 45 4D 4F 52
+             59
+      00064A 00                    1070 	.db 0x00
+      00064B                       1071 ___str_24:
+      00064B 4D 41 47 49 43 20 4F  1072 	.ascii "MAGIC OK"
+             4B
+      000653 00                    1073 	.db 0x00
+      000654                       1074 ___str_25:
+      000654 42 41 44 20 4D 41 47  1075 	.ascii "BAD MAGIC"
+             49 43
+      00065D 00                    1076 	.db 0x00
+      00065E                       1077 ___str_26:
+      00065E 54 45 53 54 20 46 41  1078 	.ascii "TEST FAILED"
+             49 4C 45 44
+      000669 00                    1079 	.db 0x00
+      00066A                       1080 ___str_27:
+      00066A 43 61 6C 6C 20 52 4F  1081 	.ascii "Call ROM"
+             4D
+      000672 00                    1082 	.db 0x00
+      000673                       1083 ___str_28:
+      000673 42 61 64 20 63 6F 75  1084 	.ascii "Bad counter..."
+             6E 74 65 72 2E 2E 2E
+      000681 00                    1085 	.db 0x00
+      000682                       1086 ___str_29:
+      000682 43 61 6C 6C 20 52 41  1087 	.ascii "Call RAM indirect"
+             4D 20 69 6E 64 69 72
+             65 63 74
+      000693 00                    1088 	.db 0x00
+      000694                       1089 ___str_30:
+      000694 43 61 6C 6C 20 48 49  1090 	.ascii "Call HIRAM         "
+             52 41 4D 20 20 20 20
+             20 20 20 20 20
+      0006A7 00                    1091 	.db 0x00
+      0006A8                       1092 ___str_31:
+      0006A8 43 61 6C 6C 20 48 49  1093 	.ascii "Call HIRAM indirect"
+             52 41 4D 20 69 6E 64
+             69 72 65 63 74
+      0006BB 00                    1094 	.db 0x00
+      0006BC                       1095 ___str_32:
+      0006BC 54 45 53 54 20 50 41  1096 	.ascii "TEST PASSED"
+             53 53 45 44
+      0006C7 00                    1097 	.db 0x00
+                                   1098 	.area _CODE
+                                   1099 	.area _INITIALIZER
+      000000                       1100 __xinit____EMU_PROFILER_INIT:
+      000000r00r00                 1101 	.dw _EMU_profiler_message
+      000002                       1102 __xinit__firstRunByte:
+      000002 00 A0                 1103 	.dw #0xa000
+      000004                       1104 __xinit__results:
+      000004 01 A0                 1105 	.dw #0xa001
+      000006                       1106 __xinit__endData:
+      000006 1E A0                 1107 	.dw #0xa01e
+      000008                       1108 __xinit__memTestCounter:
+      000008 00 00                 1109 	.dw #0x0000
+      00000A                       1110 __xinit__inc_ram_var:
+      00000Ar00r00                 1111 	.dw _ram_buffer
+      00000C                       1112 __xinit__inc_hiram_var:
+      00000Cr00r00                 1113 	.dw _hiram_buffer
+                                   1114 	.area _CABS (ABS)

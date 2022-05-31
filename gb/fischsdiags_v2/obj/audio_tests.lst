@@ -1,0 +1,130 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.1.6 #12539 (MINGW32)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module audio_tests
+                                      6 	.optsdcc -mgbz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _audio_test
+                                     12 	.globl _ask_user_pass_or_fail
+                                     13 	.globl _blank_display
+                                     14 	.globl _text_print_string_bkg
+                                     15 	.globl _joypad
+                                     16 	.globl _delay
+                                     17 ;--------------------------------------------------------
+                                     18 ; special function registers
+                                     19 ;--------------------------------------------------------
+                                     20 ;--------------------------------------------------------
+                                     21 ; ram data
+                                     22 ;--------------------------------------------------------
+                                     23 	.area _DATA
+                                     24 ;--------------------------------------------------------
+                                     25 ; ram data
+                                     26 ;--------------------------------------------------------
+                                     27 	.area _INITIALIZED
+                                     28 ;--------------------------------------------------------
+                                     29 ; absolute external ram data
+                                     30 ;--------------------------------------------------------
+                                     31 	.area _DABS (ABS)
+                                     32 ;--------------------------------------------------------
+                                     33 ; global & static initialisations
+                                     34 ;--------------------------------------------------------
+                                     35 	.area _HOME
+                                     36 	.area _GSINIT
+                                     37 	.area _GSFINAL
+                                     38 	.area _GSINIT
+                                     39 ;--------------------------------------------------------
+                                     40 ; Home
+                                     41 ;--------------------------------------------------------
+                                     42 	.area _HOME
+                                     43 	.area _HOME
+                                     44 ;--------------------------------------------------------
+                                     45 ; code
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _CODE
+                                     48 ;src/test_impl/audio_tests.c:11: int audio_test() {
+                                     49 ;	---------------------------------
+                                     50 ; Function audio_test
+                                     51 ; ---------------------------------
+      000000                         52 _audio_test::
+                                     53 ;src/test_impl/audio_tests.c:12: blank_display();
+      000000 CDr00r00                54 	call	_blank_display
+                                     55 ;src/test_impl/audio_tests.c:13: text_print_string_bkg(0, 2, "Playing sound...");
+      000003 11r79r00                56 	ld	de, #___str_0
+      000006 D5                      57 	push	de
+      000007 21 00 02                58 	ld	hl, #0x200
+      00000A E5                      59 	push	hl
+      00000B CDr00r00                60 	call	_text_print_string_bkg
+      00000E E8 04                   61 	add	sp, #4
+                                     62 ;src/test_impl/audio_tests.c:14: NR52_REG = 0x80;
+      000010 3E 80                   63 	ld	a, #0x80
+      000012 E0r00                   64 	ldh	(_NR52_REG + 0), a
+                                     65 ;src/test_impl/audio_tests.c:15: NR50_REG = 0x77; 
+      000014 3E 77                   66 	ld	a, #0x77
+      000016 E0r00                   67 	ldh	(_NR50_REG + 0), a
+                                     68 ;src/test_impl/audio_tests.c:16: NR51_REG = 0xFF;
+      000018 3E FF                   69 	ld	a, #0xff
+      00001A E0r00                   70 	ldh	(_NR51_REG + 0), a
+                                     71 ;src/test_impl/audio_tests.c:17: while (1) {
+      00001C                         72 00111$:
+                                     73 ;src/test_impl/audio_tests.c:18: if ((joypad() & J_START) || (joypad() & J_SELECT) || (joypad() & J_A) || (joypad() & J_B) || (joypad() & J_UP) || (joypad() & J_DOWN) || (joypad() & J_LEFT) || (joypad() & J_RIGHT)) {
+      00001C CDr00r00                74 	call	_joypad
+      00001F 7B                      75 	ld	a, e
+      000020 07                      76 	rlca
+      000021 DAr00r00                77 	jp	C,_ask_user_pass_or_fail
+      000024 CDr00r00                78 	call	_joypad
+      000027 CB 73                   79 	bit	6, e
+      000029 C2r00r00                80 	jp	NZ,_ask_user_pass_or_fail
+      00002C CDr00r00                81 	call	_joypad
+      00002F CB 63                   82 	bit	4, e
+      000031 C2r00r00                83 	jp	NZ,_ask_user_pass_or_fail
+      000034 CDr00r00                84 	call	_joypad
+      000037 CB 6B                   85 	bit	5, e
+      000039 C2r00r00                86 	jp	NZ,_ask_user_pass_or_fail
+      00003C CDr00r00                87 	call	_joypad
+      00003F CB 53                   88 	bit	2, e
+      000041 C2r00r00                89 	jp	NZ,_ask_user_pass_or_fail
+      000044 CDr00r00                90 	call	_joypad
+      000047 CB 5B                   91 	bit	3, e
+      000049 C2r00r00                92 	jp	NZ,_ask_user_pass_or_fail
+      00004C CDr00r00                93 	call	_joypad
+      00004F CB 4B                   94 	bit	1, e
+      000051 C2r00r00                95 	jp	NZ,_ask_user_pass_or_fail
+      000054 CDr00r00                96 	call	_joypad
+      000057 7B                      97 	ld	a, e
+      000058 0F                      98 	rrca
+      000059 DAr00r00                99 	jp	C,_ask_user_pass_or_fail
+                                    100 ;src/test_impl/audio_tests.c:21: NR10_REG = 0x16;
+      00005C 3E 16                  101 	ld	a, #0x16
+      00005E E0r00                  102 	ldh	(_NR10_REG + 0), a
+                                    103 ;src/test_impl/audio_tests.c:22: NR11_REG = 0x40;
+      000060 3E 40                  104 	ld	a, #0x40
+      000062 E0r00                  105 	ldh	(_NR11_REG + 0), a
+                                    106 ;src/test_impl/audio_tests.c:23: NR12_REG = 0x58;
+      000064 3E 58                  107 	ld	a, #0x58
+      000066 E0r00                  108 	ldh	(_NR12_REG + 0), a
+                                    109 ;src/test_impl/audio_tests.c:24: NR13_REG = 0x00;
+      000068 AF                     110 	xor	a, a
+      000069 E0r00                  111 	ldh	(_NR13_REG + 0), a
+                                    112 ;src/test_impl/audio_tests.c:25: NR14_REG = 0xC3;
+      00006B 3E C3                  113 	ld	a, #0xc3
+      00006D E0r00                  114 	ldh	(_NR14_REG + 0), a
+                                    115 ;src/test_impl/audio_tests.c:26: delay(1000);
+      00006F 11 E8 03               116 	ld	de, #0x03e8
+      000072 D5                     117 	push	de
+      000073 CDr00r00               118 	call	_delay
+      000076 D1                     119 	pop	de
+                                    120 ;src/test_impl/audio_tests.c:29: return ask_user_pass_or_fail();
+                                    121 ;src/test_impl/audio_tests.c:30: }
+      000077 18 A3                  122 	jr	00111$
+      000079                        123 ___str_0:
+      000079 50 6C 61 79 69 6E 67   124 	.ascii "Playing sound..."
+             20 73 6F 75 6E 64 2E
+             2E 2E
+      000089 00                     125 	.db 0x00
+                                    126 	.area _CODE
+                                    127 	.area _INITIALIZER
+                                    128 	.area _CABS (ABS)

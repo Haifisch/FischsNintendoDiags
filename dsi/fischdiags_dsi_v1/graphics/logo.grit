@@ -1,0 +1,11 @@
+-W3
+# 8 bit bitmap
+-gB8
+#-gzl
+-gT!
+
+-m
+-mRp
+
+# bitmap format
+-gb

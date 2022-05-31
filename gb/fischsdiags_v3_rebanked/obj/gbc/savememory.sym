@@ -1,0 +1,114 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000000 L
+    _EMU_printf                                                    ****** GX
+    _EMU_profiler_message                                          ****** GX
+    _LCDC_REG                                                      ****** GX
+    _RAM_SPRITE                                                    ****** GX
+  2 ___EMU_PROFILER_INIT                                           000000 R
+    ___bank_mem_test                                            =  000001 G
+  7 ___func_mem_test                                               0004C2 GR
+    ___sdcc_bcall_ehl                                              ****** GX
+    ___sdcc_call_hl                                                ****** GX
+  7 ___str_0                                                       000122 R
+  7 ___str_1                                                       00013E R
+  7 ___str_10                                                      000311 R
+  7 ___str_11                                                      000315 R
+  7 ___str_12                                                      000319 R
+  7 ___str_13                                                      00031D R
+  7 ___str_14                                                      000321 R
+  7 ___str_15                                                      00034C R
+  7 ___str_16                                                      000368 R
+  7 ___str_17                                                      000379 R
+  7 ___str_18                                                      0003C2 R
+  7 ___str_19                                                      0003D1 R
+  7 ___str_2                                                       00014F R
+  7 ___str_20                                                      0007DF R
+  7 ___str_21                                                      0007FB R
+  7 ___str_22                                                      00080C R
+  7 ___str_23                                                      000815 R
+  7 ___str_24                                                      000825 R
+  7 ___str_25                                                      00082E R
+  7 ___str_26                                                      000838 R
+  7 ___str_27                                                      000841 R
+  7 ___str_28                                                      000850 R
+  7 ___str_29                                                      00085C R
+  7 ___str_3                                                       000160 R
+  7 ___str_30                                                      00086E R
+  7 ___str_31                                                      000882 R
+  7 ___str_32                                                      000896 R
+  7 ___str_4                                                       000163 R
+  7 ___str_5                                                       0002CE R
+  7 ___str_6                                                       0002EA R
+  7 ___str_7                                                       0002FB R
+  7 ___str_8                                                       000308 R
+  7 ___str_9                                                       00030D R
+    __current_bank                                                 ****** GX
+  8 __xinit____EMU_PROFILER_INIT                                   000000 R
+  8 __xinit__endData                                               000006 R
+  8 __xinit__firstRunByte                                          000002 R
+  8 __xinit__inc_hiram_var                                         00000C R
+  8 __xinit__inc_ram_var                                           00000A R
+  8 __xinit__memTestCounter                                        000008 R
+  8 __xinit__results                                               000004 R
+  7 _check_savemem                                                 000324 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _delay                                                         ****** GX
+  2 _endData                                                       000006 GR
+  2 _firstRunByte                                                  000002 GR
+    _hiram_buffer                                               =  00FFA0 G
+    _hiramcpy                                                      ****** GX
+  7 _inc                                                           000000 GR
+  7 _inc_end                                                       000008 GR
+    _inc_hiram                                                     ****** GX
+  2 _inc_hiram_var                                                 00000C GR
+    _inc_ram                                                       ****** GX
+  2 _inc_ram_var                                                   00000A GR
+  7 _init_savemem                                                  000166 GR
+  2 _memTestCounter                                                000008 GR
+  7 _mem_test                                                      0004C2 GR
+    _memcpy                                                        ****** GX
+    _memset                                                        ****** GX
+  7 _print_counter                                                 000387 GR
+    _ram_buffer                                                 =  00D000 G
+  7 _ram_sprite_clear                                              0004A5 GR
+  7 _ram_sprite_display                                            00044B GR
+  7 _ram_sprite_move                                               0003DF GR
+  2 _results                                                       000004 GR
+  7 _save_test_result                                              000009 GR
+    _set_sprite_data                                               ****** GX
+    _set_sprite_palette                                            ****** GX
+    _shadow_OAM                                                    ****** GX
+    _sprintf                                                       ****** GX
+    _text_print_string_bkg                                         ****** GX
+    b___func_mem_test                                           =  000001 L
+    b_mem_test                                                  =  000001 G
+    b_text_print_string_bkg                                        ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 3.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 _DATA                                      size      0   flags    0
+   2 _INITIALIZED                               size      E   flags    0
+   3 _DABS                                      size      0   flags    8
+   4 _HOME                                      size      0   flags    0
+   5 _GSINIT                                    size      0   flags    0
+   6 _GSFINAL                                   size      0   flags    0
+   7 _CODE_1                                    size    8A2   flags    0
+   8 _INITIALIZER                               size      E   flags    0
+   9 _CABS                                      size      0   flags    8
+
